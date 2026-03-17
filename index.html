@@ -1,0 +1,1739 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>招商银行 · 深度研究报告 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=DM+Mono:wght@300;400;500&family=Noto+Serif+SC:wght@300;400;600;700&family=Noto+Sans+SC:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"></script>
+<style>
+/* ── Reset & Base ────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --ink:      #e8dfd0;
+  --ink-dim:  #9a8f80;
+  --ink-faint:#4a443c;
+  --gold:     #c9a55a;
+  --gold-lt:  #e8c97e;
+  --gold-dk:  #8a6e30;
+  --red:      #e05252;
+  --green:    #52b788;
+  --blue:     #5b9bd5;
+  --bg:       #0c1520;
+  --bg-card:  #111c2a;
+  --bg-elevated: #162032;
+  --border:   rgba(201,165,90,0.15);
+  --border-bright: rgba(201,165,90,0.4);
+  --font-display: 'Cormorant Garamond', 'Noto Serif SC', serif;
+  --font-body:    'Noto Sans SC', sans-serif;
+  --font-mono:    'DM Mono', monospace;
+  --radius: 2px;
+}
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+::selection { background: var(--gold); color: var(--bg); }
+a { color: var(--gold); text-decoration: none; }
+
+/* ── Scrollbar ───────────────────────────────────────────── */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--gold-dk); border-radius: 2px; }
+
+/* ── Layout ──────────────────────────────────────────────── */
+.sidebar {
+  position: fixed;
+  top: 0; left: 0;
+  width: 220px;
+  height: 100vh;
+  background: var(--bg-card);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  padding: 32px 0;
+  z-index: 100;
+  overflow-y: auto;
+}
+.main {
+  margin-left: 220px;
+  min-height: 100vh;
+  width: calc(100vw - 220px);
+  overflow-x: hidden;
+}
+
+/* ── Sidebar ─────────────────────────────────────────────── */
+.sidebar-brand {
+  padding: 0 24px 28px;
+  border-bottom: 1px solid var(--border);
+}
+.sidebar-brand .ticker {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--gold);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+.sidebar-brand .company-name {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.2;
+  margin-top: 4px;
+}
+.sidebar-brand .tag {
+  display: inline-block;
+  margin-top: 8px;
+  font-size: 10px;
+  padding: 3px 8px;
+  border: 1px solid var(--border-bright);
+  color: var(--gold);
+  letter-spacing: 0.1em;
+}
+.sidebar-price {
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--border);
+}
+.sidebar-price .price-val {
+  font-family: var(--font-display);
+  font-size: 32px;
+  font-weight: 300;
+  color: var(--green);
+  line-height: 1;
+}
+.sidebar-price .price-label {
+  font-size: 10px;
+  color: var(--ink-dim);
+  letter-spacing: 0.08em;
+  margin-top: 4px;
+}
+.sidebar-kpi {
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--border);
+}
+.kpi-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 6px 0;
+}
+.kpi-label { font-size: 11px; color: var(--ink-dim); }
+.kpi-val {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--ink);
+  font-weight: 500;
+}
+.kpi-val.gold { color: var(--gold); }
+.kpi-val.green { color: var(--green); }
+.kpi-val.red { color: var(--red); }
+
+.sidebar-nav {
+  padding: 20px 0;
+  flex: 1;
+}
+.nav-section {
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  padding: 12px 24px 6px;
+}
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 24px;
+  font-size: 12px;
+  color: var(--ink-dim);
+  cursor: pointer;
+  transition: all 0.2s;
+  border-left: 2px solid transparent;
+}
+.nav-link:hover, .nav-link.active {
+  color: var(--gold);
+  border-left-color: var(--gold);
+  background: rgba(201,165,90,0.05);
+}
+.nav-dot {
+  width: 4px; height: 4px;
+  border-radius: 50%;
+  background: currentColor;
+  flex-shrink: 0;
+}
+.sidebar-footer {
+  padding: 16px 24px;
+  border-top: 1px solid var(--border);
+  font-size: 10px;
+  color: var(--ink-faint);
+  line-height: 1.6;
+}
+
+/* ── Hero Section ────────────────────────────────────────── */
+.hero {
+  position: relative;
+  padding: 64px 56px 48px;
+  background: linear-gradient(135deg, #0c1520 0%, #111e30 50%, #0c1a28 100%);
+  border-bottom: 1px solid var(--border);
+  overflow: hidden;
+}
+.hero::before {
+  content: '招商银行';
+  position: absolute;
+  right: -20px; top: -20px;
+  font-family: var(--font-display);
+  font-size: 180px;
+  font-weight: 700;
+  color: rgba(201,165,90,0.03);
+  white-space: nowrap;
+  pointer-events: none;
+  line-height: 1;
+}
+.hero::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: radial-gradient(ellipse at 80% 50%, rgba(201,165,90,0.04) 0%, transparent 60%);
+  pointer-events: none;
+}
+.report-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+.hero h1 {
+  font-family: var(--font-display);
+  font-size: 52px;
+  font-weight: 300;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin-bottom: 8px;
+  color: var(--ink);
+}
+.hero h1 em {
+  font-style: italic;
+  color: var(--gold);
+}
+.hero-sub {
+  font-size: 13px;
+  color: var(--ink-dim);
+  max-width: 560px;
+  line-height: 1.7;
+  margin-top: 12px;
+}
+.hero-metrics {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1px;
+  margin-top: 40px;
+  background: var(--border);
+  border: 1px solid var(--border);
+}
+.hero-metric {
+  background: var(--bg-card);
+  padding: 20px 20px 16px;
+  position: relative;
+  overflow: hidden;
+}
+.hero-metric::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--gold);
+  transform: scaleX(0);
+  transition: transform 0.3s;
+}
+.hero-metric:hover::after { transform: scaleX(1); }
+.hm-label { font-size: 10px; color: var(--ink-dim); letter-spacing: 0.08em; margin-bottom: 8px; }
+.hm-val {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 300;
+  line-height: 1;
+  color: var(--ink);
+}
+.hm-val.gold { color: var(--gold); }
+.hm-val.green { color: var(--green); }
+.hm-unit { font-size: 12px; color: var(--ink-dim); margin-top: 4px; }
+.verdict-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 20px;
+  padding: 8px 20px;
+  border: 1px solid var(--gold);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: var(--gold);
+}
+.verdict-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--gold);
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+/* ── Section Styles ──────────────────────────────────────── */
+.section {
+  padding: 48px 56px;
+  border-bottom: 1px solid var(--border);
+}
+.section:last-child { border-bottom: none; }
+.section-header {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+.section-num {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--gold);
+  letter-spacing: 0.15em;
+}
+.section-title {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 400;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+}
+.section-desc {
+  font-size: 13px;
+  color: var(--ink-dim);
+  line-height: 1.7;
+  max-width: 680px;
+  margin-bottom: 32px;
+}
+
+/* ── Cards & Grids ───────────────────────────────────────── */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  padding: 24px;
+  position: relative;
+}
+.card-title {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+.grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+
+/* ── Chart Wrappers ──────────────────────────────────────── */
+.chart-wrap {
+  position: relative;
+  width: 100%;
+  height: 280px;
+}
+.chart-wrap-sm { height: 200px; }
+.chart-wrap-lg { height: 360px; }
+
+/* ── Stat Cards ──────────────────────────────────────────── */
+.stat-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  padding: 20px 24px;
+  position: relative;
+}
+.stat-card .sc-val {
+  font-family: var(--font-display);
+  font-size: 36px;
+  font-weight: 300;
+  line-height: 1;
+  color: var(--ink);
+}
+.stat-card .sc-val.gold { color: var(--gold); }
+.stat-card .sc-val.green { color: var(--green); }
+.stat-card .sc-val.red { color: var(--red); }
+.stat-card .sc-label { font-size: 11px; color: var(--ink-dim); margin-top: 6px; }
+.stat-card .sc-change {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  margin-top: 8px;
+  padding: 2px 8px;
+  display: inline-block;
+}
+.stat-card .sc-change.pos { background: rgba(82,183,136,0.1); color: var(--green); }
+.stat-card .sc-change.neg { background: rgba(224,82,82,0.1); color: var(--red); }
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 3px;
+  height: 100%;
+}
+.stat-card.accent-gold::before { background: var(--gold); }
+.stat-card.accent-green::before { background: var(--green); }
+.stat-card.accent-blue::before { background: var(--blue); }
+.stat-card.accent-red::before { background: var(--red); }
+
+/* ── Tables ──────────────────────────────────────────────── */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+.data-table th {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gold);
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--border-bright);
+  text-align: right;
+  background: var(--bg);
+}
+.data-table th:first-child { text-align: left; }
+.data-table td {
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--border);
+  color: var(--ink);
+  text-align: right;
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+.data-table td:first-child {
+  text-align: left;
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--ink);
+}
+.data-table tr.highlight td { background: rgba(201,165,90,0.06); }
+.data-table tr.highlight td:first-child { color: var(--gold); font-weight: 500; }
+.data-table tr:hover td { background: rgba(255,255,255,0.02); }
+.val-pos { color: var(--green) !important; }
+.val-neg { color: var(--red) !important; }
+.val-gold { color: var(--gold) !important; }
+
+/* ── Score Card ──────────────────────────────────────────── */
+.scorecard {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 24px;
+}
+.score-main {
+  background: var(--bg-card);
+  border: 1px solid var(--border-bright);
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.score-ring {
+  position: relative;
+  width: 140px; height: 140px;
+  margin-bottom: 20px;
+}
+.score-ring svg { transform: rotate(-90deg); }
+.score-ring .score-text {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: var(--font-display);
+  font-size: 42px;
+  font-weight: 300;
+  color: var(--gold);
+  line-height: 1;
+}
+.score-ring .score-sub {
+  position: absolute;
+  bottom: 28px; left: 50%;
+  transform: translateX(-50%);
+  font-size: 11px;
+  color: var(--ink-dim);
+  white-space: nowrap;
+}
+.score-verdict {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--gold);
+  margin-bottom: 8px;
+}
+.score-items { display: flex; flex-direction: column; gap: 10px; }
+.score-item {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.si-label { font-size: 13px; color: var(--ink); }
+.si-bar-wrap {
+  flex: 1;
+  height: 4px;
+  background: var(--bg);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.si-bar {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 1s ease;
+}
+.si-score {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--gold);
+  min-width: 36px;
+  text-align: right;
+}
+
+/* ── Annotations ─────────────────────────────────────────── */
+.annotation {
+  background: rgba(201,165,90,0.05);
+  border-left: 3px solid var(--gold);
+  padding: 12px 16px;
+  font-size: 12px;
+  color: var(--ink-dim);
+  line-height: 1.6;
+  margin: 12px 0;
+}
+.annotation strong { color: var(--ink); }
+
+/* ── Divider ─────────────────────────────────────────────── */
+.divider {
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--border-bright), transparent);
+  margin: 24px 0;
+}
+
+/* ── Holder Bar ──────────────────────────────────────────── */
+.holder-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+}
+.holder-name { font-size: 12px; color: var(--ink); min-width: 200px; }
+.holder-track {
+  flex: 1;
+  height: 6px;
+  background: var(--bg);
+  border-radius: 1px;
+  overflow: hidden;
+}
+.holder-fill {
+  height: 100%;
+  background: linear-gradient(to right, var(--gold-dk), var(--gold));
+  border-radius: 1px;
+}
+.holder-pct {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--gold);
+  min-width: 50px;
+  text-align: right;
+}
+
+/* ── Responsive (≤1100px) ────────────────────────────────── */
+@media (max-width: 1100px) {
+  .hero-metrics { grid-template-columns: repeat(3, 1fr); }
+  .grid-4 { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* ── Mobile Hamburger Button (hidden on desktop) ─────────── */
+.menu-btn {
+  display: none;
+}
+
+/* ── Sidebar Overlay (hidden by default) ─────────────────── */
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  z-index: 99;
+}
+.sidebar-overlay.open { display: block; }
+
+/* ── Mobile (≤768px) ─────────────────────────────────────── */
+@media (max-width: 768px) {
+  /* Sidebar: off-canvas drawer */
+  .sidebar {
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    z-index: 200;
+    width: 260px;
+  }
+  .sidebar.open { transform: translateX(0); }
+
+  /* Main: full width */
+  .main {
+    margin-left: 0;
+    width: 100vw;
+  }
+
+  /* Hamburger button */
+  .menu-btn {
+    display: flex;
+    position: fixed;
+    top: 14px;
+    right: 16px;
+    z-index: 300;
+    width: 40px;
+    height: 40px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-bright);
+    border-radius: var(--radius);
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 5px;
+    padding: 10px;
+    cursor: pointer;
+  }
+  .menu-btn span {
+    display: block;
+    width: 18px;
+    height: 1.5px;
+    background: var(--gold);
+    transition: all 0.25s;
+    border-radius: 1px;
+  }
+  .menu-btn.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+  .menu-btn.open span:nth-child(2) { opacity: 0; }
+  .menu-btn.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+  /* Hero */
+  .hero {
+    padding: 64px 20px 32px;
+  }
+  .hero h1 { font-size: 34px; }
+  .hero-sub { font-size: 12px; }
+  .hero-metrics {
+    grid-template-columns: repeat(2, 1fr);
+    margin-top: 24px;
+  }
+  .hm-val { font-size: 22px; }
+
+  /* Sections */
+  .section { padding: 28px 16px; }
+  .section-title { font-size: 22px; }
+
+  /* Grids: all single column */
+  .grid-2,
+  .grid-3,
+  .grid-4 { grid-template-columns: 1fr; }
+
+  /* Scorecard: stack vertically */
+  .scorecard { grid-template-columns: 1fr; }
+
+  /* Stat card values */
+  .stat-card .sc-val { font-size: 28px; }
+
+  /* Tables: scroll horizontally inside card */
+  .card { overflow-x: auto; }
+
+  /* Holder bars: allow name to shrink */
+  .holder-name {
+    min-width: 0;
+    max-width: 110px;
+    font-size: 11px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Chart heights: a bit shorter on small screens */
+  .chart-wrap { height: 220px; }
+  .chart-wrap-lg { height: 260px; }
+  .chart-wrap-sm { height: 180px; }
+
+  /* Score ring: center on mobile */
+  .score-main { padding: 24px 16px; }
+}
+
+/* ── Fade-in animations ──────────────────────────────────── */
+.fade-in {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+</style>
+</head>
+<body>
+
+<!-- ── SIDEBAR ─────────────────────────────────────────────────────────── -->
+<aside class="sidebar">
+  <div class="sidebar-brand">
+    <div class="ticker">600036.SH · 银行</div>
+    <div class="company-name">招商<br>银行</div>
+    <span class="tag">深度研究报告</span>
+  </div>
+  <div class="sidebar-price">
+    <div class="price-val">¥40.12</div>
+    <div class="price-label">收盘价 · 2026-03-17</div>
+  </div>
+  <div class="sidebar-kpi">
+    <div class="kpi-row"><span class="kpi-label">PE(TTM)</span><span class="kpi-val">6.74×</span></div>
+    <div class="kpi-row"><span class="kpi-label">PB</span><span class="kpi-val">0.95×</span></div>
+    <div class="kpi-row"><span class="kpi-label">股息率(TTM)</span><span class="kpi-val green">7.51%</span></div>
+    <div class="kpi-row"><span class="kpi-label">市值</span><span class="kpi-val gold">10118亿</span></div>
+    <div class="kpi-row"><span class="kpi-label">ROE (2024)</span><span class="kpi-val">12.89%</span></div>
+    <div class="kpi-row"><span class="kpi-label">净利率 (2024)</span><span class="kpi-val">44.32%</span></div>
+    <div class="kpi-row"><span class="kpi-label">EPS (2024)</span><span class="kpi-val gold">¥5.66</span></div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-section">分析章节</div>
+    <a class="nav-link active" href="#overview"><span class="nav-dot"></span>公司概览</a>
+    <a class="nav-link" href="#valuation"><span class="nav-dot"></span>估值分析</a>
+    <a class="nav-link" href="#profitability"><span class="nav-dot"></span>盈利能力</a>
+    <a class="nav-link" href="#balance"><span class="nav-dot"></span>资产质量</a>
+    <a class="nav-link" href="#dividend"><span class="nav-dot"></span>分红历史</a>
+    <a class="nav-link" href="#peers"><span class="nav-dot"></span>同业对比</a>
+    <a class="nav-link" href="#shareholders"><span class="nav-dot"></span>股权结构</a>
+    <a class="nav-link" href="#macro"><span class="nav-dot"></span>宏观环境</a>
+    <a class="nav-link" href="#verdict"><span class="nav-dot"></span>投资结论</a>
+  </nav>
+  <div class="sidebar-footer">
+    数据来源：Tushare Pro<br>
+    报告日期：2026年3月18日<br>
+    仅供研究参考，不构成投资建议
+  </div>
+</aside>
+
+<!-- ── MAIN CONTENT ─────────────────────────────────────────────────────── -->
+<main class="main">
+
+<!-- HERO -->
+<section class="hero" id="overview">
+  <div class="report-label">EQUITY RESEARCH · DEEP DIVE 2026</div>
+  <h1>招商银行<br><em>全景体检报告</em></h1>
+  <p class="hero-sub">
+    深度解析招商银行基本面、估值水平与投资价值，结合银行业同行对比及中国宏观经济环境，
+    为投资者提供全方位的决策参考。
+  </p>
+  <div class="verdict-badge">
+    <span class="verdict-dot"></span>
+    零售银行王者 · 股息价值凸显 · 关注息差压力
+  </div>
+  <div class="hero-metrics">
+    <div class="hero-metric">
+      <div class="hm-label">总资产</div>
+      <div class="hm-val gold">12.15</div>
+      <div class="hm-unit">万亿元 (2024年报)</div>
+    </div>
+    <div class="hero-metric">
+      <div class="hm-label">归母净利润</div>
+      <div class="hm-val">1484</div>
+      <div class="hm-unit">亿元 (2024年报)</div>
+    </div>
+    <div class="hero-metric">
+      <div class="hm-label">ROE</div>
+      <div class="hm-val green">12.89%</div>
+      <div class="hm-unit">净资产收益率 (2024)</div>
+    </div>
+    <div class="hero-metric">
+      <div class="hm-label">净利润增速</div>
+      <div class="hm-val">1.22%</div>
+      <div class="hm-unit">同比增速 (2024年报)</div>
+    </div>
+    <div class="hero-metric">
+      <div class="hm-label">年度现金分红</div>
+      <div class="hm-val gold">¥2.00</div>
+      <div class="hm-unit">每股 (2024年报)</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── SECTION 1: VALUATION ─────────────────────────────────────────────── -->
+<section class="section fade-in" id="valuation">
+  <div class="section-header">
+    <span class="section-num">01</span>
+    <h2 class="section-title">估值分析</h2>
+  </div>
+  <p class="section-desc">
+    当前 PE(TTM) 6.74× 处于历史偏低区间，PB 0.95× 跌破1倍净资产，
+    股息率高达 7.51%，显示市场对银行业的悲观预期已较充分定价。
+  </p>
+
+  <div class="grid-4" style="margin-bottom:24px;">
+    <div class="stat-card accent-gold">
+      <div class="sc-val gold">6.74×</div>
+      <div class="sc-label">PE(TTM)</div>
+      <div class="sc-change neg">↓ 历史中低位</div>
+    </div>
+    <div class="stat-card accent-green">
+      <div class="sc-val green">7.51%</div>
+      <div class="sc-label">股息率(TTM)</div>
+      <div class="sc-change pos">↑ 远超十年期国债</div>
+    </div>
+    <div class="stat-card accent-blue">
+      <div class="sc-val">0.95×</div>
+      <div class="sc-label">PB(市净率)</div>
+      <div class="sc-change neg">↓ 破净状态</div>
+    </div>
+    <div class="stat-card accent-red">
+      <div class="sc-val">5.66</div>
+      <div class="sc-label">EPS (2024)</div>
+      <div class="sc-change pos">↑ 连续增长</div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">PE(TTM) 历史走势 (2020-2026)</div>
+      <div class="chart-wrap">
+        <canvas id="chartPE"></canvas>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">PB 与 股息率 历史走势</div>
+      <div class="chart-wrap">
+        <canvas id="chartPBDV"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="annotation" style="margin-top:16px;">
+    <strong>估值解读：</strong> 招商银行当前 PE ~6.7× 处于近五年历史低位，PB 0.95× 已跌破1倍净资产，
+    历史上仅在2022-2023年极度悲观时期出现类似水平。股息率 7.5% 显著高于当前无风险利率（10年期国债约1.8%），
+    股息利差超过5.7个百分点，安全边际明显。
+  </div>
+
+  <div class="card" style="margin-top:16px;">
+    <div class="card-title">股价走势 (2020-2026)</div>
+    <div class="chart-wrap chart-wrap-lg">
+      <canvas id="chartPrice"></canvas>
+    </div>
+  </div>
+</section>
+
+<!-- ── SECTION 2: PROFITABILITY ─────────────────────────────────────────── -->
+<section class="section fade-in" id="profitability">
+  <div class="section-header">
+    <span class="section-num">02</span>
+    <h2 class="section-title">盈利能力</h2>
+  </div>
+  <p class="section-desc">
+    招商银行净利润连续七年正增长，2024年归母净利润达 1484 亿元，
+    净利润率 44.32% 居股份制银行首位，ROE 12.89% 领先同业。
+  </p>
+
+  <div class="grid-2" style="margin-bottom:16px;">
+    <div class="card">
+      <div class="card-title">营收与归母净利润 (亿元)</div>
+      <div class="chart-wrap">
+        <canvas id="chartIncome"></canvas>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">ROE 与 净利润增速 趋势</div>
+      <div class="chart-wrap">
+        <canvas id="chartROE"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-4">
+    <div class="stat-card accent-gold">
+      <div class="sc-val gold">12.89%</div>
+      <div class="sc-label">ROE (2024年报)</div>
+      <div class="sc-change pos">同业第一梯队</div>
+    </div>
+    <div class="stat-card accent-green">
+      <div class="sc-val green">44.32%</div>
+      <div class="sc-label">净利润率 (2024)</div>
+      <div class="sc-change pos">↑ 连续提升</div>
+    </div>
+    <div class="stat-card accent-blue">
+      <div class="sc-val">3375</div>
+      <div class="sc-label">营业收入（亿元）</div>
+      <div class="sc-change neg">↓ 息差压缩</div>
+    </div>
+    <div class="stat-card accent-red">
+      <div class="sc-val">1.22%</div>
+      <div class="sc-label">净利润增速</div>
+      <div class="sc-change pos">↑ 触底回升</div>
+    </div>
+  </div>
+
+  <div class="annotation" style="margin-top:16px;">
+    <strong>盈利解读：</strong> 2021-2022年受疫情后信贷扩张驱动，净利润增速高达23%/15%；2023-2024年在经济复苏放缓、
+    净息差持续收窄背景下增速回落至6%/1%，但净利润依然创历史新高。净利润率从2019年的34.6%
+    提升至2024年的44.3%，体现了招行精细化管理和成本控制能力的持续改善。
+  </div>
+</section>
+
+<!-- ── SECTION 3: BALANCE SHEET ─────────────────────────────────────────── -->
+<section class="section fade-in" id="balance">
+  <div class="section-header">
+    <span class="section-num">03</span>
+    <h2 class="section-title">资产质量与规模</h2>
+  </div>
+  <p class="section-desc">
+    2024年总资产突破 12.15 万亿元，同比增长约10%，
+    股东权益持续积累，资本实力稳健，负债率保持银行业正常水平。
+  </p>
+
+  <div class="grid-2" style="margin-bottom:16px;">
+    <div class="card">
+      <div class="card-title">总资产规模 (万亿元)</div>
+      <div class="chart-wrap">
+        <canvas id="chartAssets"></canvas>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">股东权益增长 (千亿元)</div>
+      <div class="chart-wrap">
+        <canvas id="chartEquity"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">主要财务指标年度汇总</div>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>年份</th>
+          <th>营收(亿)</th>
+          <th>归母净利(亿)</th>
+          <th>EPS(元)</th>
+          <th>ROE(%)</th>
+          <th>净利率(%)</th>
+          <th>净利增速(%)</th>
+          <th>总资产(万亿)</th>
+        </tr>
+      </thead>
+      <tbody id="financialTableBody"></tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ── SECTION 4: DIVIDEND ──────────────────────────────────────────────── -->
+<section class="section fade-in" id="dividend">
+  <div class="section-header">
+    <span class="section-num">04</span>
+    <h2 class="section-title">分红历史</h2>
+  </div>
+  <p class="section-desc">
+    招商银行坚持高比例现金分红，2016年以来每股分红从0.74元增至2024年2.00元，
+    九年累计增长170%，2025年上半年已实施中期分红每股1.013元。
+  </p>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">每股现金分红历史 (元/股)</div>
+      <div class="chart-wrap">
+        <canvas id="chartDividend"></canvas>
+      </div>
+    </div>
+    <div class="card" style="padding:24px;">
+      <div class="card-title">分红亮点</div>
+      <div style="padding-top:8px;">
+        <div class="holder-bar" style="padding:16px 0;">
+          <div class="holder-name" style="font-size:13px;color:var(--ink);">2024年 每股分红</div>
+          <div class="holder-track"><div class="holder-fill" style="width:100%"></div></div>
+          <div class="holder-pct" style="font-size:16px;">¥2.00</div>
+        </div>
+        <div class="holder-bar" style="padding:16px 0;">
+          <div class="holder-name" style="font-size:13px;color:var(--ink);">2016年 每股分红</div>
+          <div class="holder-track"><div class="holder-fill" style="width:37%;background:linear-gradient(to right,var(--ink-faint),var(--ink-dim))"></div></div>
+          <div class="holder-pct" style="font-size:16px;">¥0.74</div>
+        </div>
+        <div style="margin-top:16px;">
+          <div class="annotation">
+            <strong>分红增长：</strong>9年累计增长 <span style="color:var(--gold);font-family:var(--font-mono);">+170%</span>，
+            年化增速约 <span style="color:var(--gold);font-family:var(--font-mono);">11.7%</span>，
+            彰显稳健的盈利增长和股东回报意愿。
+          </div>
+          <div class="annotation" style="margin-top:8px;">
+            <strong>股息率：</strong>当前股价 ¥40.12 对应2024年分红股息率
+            <span style="color:var(--green);font-family:var(--font-mono);">4.99%</span>，
+            若计入2025H1中期分红则TTM股息率约
+            <span style="color:var(--green);font-family:var(--font-mono);">7.51%</span>，
+            大幅跑赢无风险利率。
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── SECTION 5: PEER COMPARISON ───────────────────────────────────────── -->
+<section class="section fade-in" id="peers">
+  <div class="section-header">
+    <span class="section-num">05</span>
+    <h2 class="section-title">同业横向对比</h2>
+  </div>
+  <p class="section-desc">
+    在A股42家上市银行中，招商银行以独特的"轻资产、高ROE"模式脱颖而出，
+    在估值溢价、盈利质量、零售客户粘性方面具备显著竞争优势。
+  </p>
+
+  <div class="grid-2" style="margin-bottom:16px;">
+    <div class="card">
+      <div class="card-title">主要银行 PE vs PB 对比</div>
+      <div class="chart-wrap">
+        <canvas id="chartPeerPE"></canvas>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">主要银行 ROE 对比 (2024年报)</div>
+      <div class="chart-wrap">
+        <canvas id="chartPeerROE"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">主要银行综合估值与财务对比</div>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>银行</th>
+          <th>PE(TTM)</th>
+          <th>PB</th>
+          <th>股息率%</th>
+          <th>市值(亿)</th>
+          <th>ROE%</th>
+          <th>净利润率%</th>
+          <th>净利增速%</th>
+        </tr>
+      </thead>
+      <tbody id="peerTableBody"></tbody>
+    </table>
+  </div>
+
+  <div class="annotation" style="margin-top:16px;">
+    <strong>竞争优势：</strong>招商银行 ROE 12.89% 显著高于工行(9.5%)、建行(10.4%)、农行(9.4%)等国有大行，
+    净利润率44.3%处于同业领先水平。PB虽已跌破1倍，但仍高于多数银行，
+    体现市场对其盈利质量的差异化认可。股息率7.5% 在银行股中同样居于较高水平。
+  </div>
+</section>
+
+<!-- ── SECTION 6: SHAREHOLDERS ──────────────────────────────────────────── -->
+<section class="section fade-in" id="shareholders">
+  <div class="section-header">
+    <span class="section-num">06</span>
+    <h2 class="section-title">股权结构</h2>
+  </div>
+  <p class="section-desc">
+    招商银行大股东为招商局集团旗下主体，港资持股比例较高（HKSCC代理人持有18%+），
+    股权结构稳定，无控股权争夺风险。
+  </p>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">十大股东持股比例 (2025Q3)</div>
+      <div class="chart-wrap chart-wrap-lg" style="height:320px;">
+        <canvas id="chartHolders"></canvas>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">十大股东详情</div>
+      <div id="holderBars" style="padding-top:8px;"></div>
+    </div>
+  </div>
+
+  <div class="annotation" style="margin-top:16px;">
+    <strong>股权解读：</strong>
+    招商局集团通过招商局轮船(13.04%)、招商局金融控股(4.55%)合计持有约17.6%，
+    为实际控制人。香港中央结算(代理人)持有18.06%代表大量港股通/H股投资者，
+    外资持股比例较高是招行零售银行品牌和管理水平获国际认可的体现。
+    中国远洋运输(6.24%)与中远海运(广州)(2.76%)合计持有约9%，
+    体现国资背景的多元化股权结构。
+  </div>
+</section>
+
+<!-- ── SECTION 7: MACRO ──────────────────────────────────────────────────── -->
+<section class="section fade-in" id="macro">
+  <div class="section-header">
+    <span class="section-num">07</span>
+    <h2 class="section-title">宏观经济环境</h2>
+  </div>
+  <p class="section-desc">
+    中国经济保持5%左右的增速，但通缩压力依然存在，利率持续下行，
+    货币宽松格局对银行净息差构成压力，同时也支撑经济扩张和信贷需求。
+  </p>
+
+  <div class="grid-2" style="margin-bottom:16px;">
+    <div class="card">
+      <div class="card-title">GDP 季度同比增速 (%)</div>
+      <div class="chart-wrap">
+        <canvas id="chartGDP"></canvas>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">CPI 同比增速 (%) — 通胀走势</div>
+      <div class="chart-wrap">
+        <canvas id="chartCPI"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">M1 / M2 货币供应同比增速 (%)</div>
+      <div class="chart-wrap">
+        <canvas id="chartM2"></canvas>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Shibor 利率走势 (3个月期 & 1年期)</div>
+      <div class="chart-wrap">
+        <canvas id="chartShibor"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="annotation" style="margin-top:16px;">
+    <strong>宏观解读：</strong>
+    ①<strong>增长：</strong>2025年GDP增速维持5%以上，为信贷扩张提供基础支撑。
+    ②<strong>通胀：</strong>2025年初CPI同比-0.7%，通缩压力下实际利率上升，
+    对借贷需求有一定抑制。
+    ③<strong>货币：</strong>M2增速7.3%，流动性充裕；M1增速持续低迷，
+    反映实体经济活跃度有待提升。
+    ④<strong>利率：</strong>Shibor持续下行（当前3M约1.54%），LPR历经多次下调，
+    银行净息差承压是当前最大挑战。
+  </div>
+</section>
+
+<!-- ── SECTION 8: VERDICT ────────────────────────────────────────────────── -->
+<section class="section fade-in" id="verdict">
+  <div class="section-header">
+    <span class="section-num">08</span>
+    <h2 class="section-title">投资结论</h2>
+  </div>
+  <p class="section-desc">
+    综合基本面、估值、宏观环境及同业比较，对招商银行进行多维度量化评分。
+  </p>
+
+  <div class="scorecard">
+    <div class="score-main">
+      <div class="score-ring">
+        <svg width="140" height="140" viewBox="0 0 140 140">
+          <circle cx="70" cy="70" r="58" fill="none" stroke="rgba(201,165,90,0.1)" stroke-width="8"/>
+          <circle cx="70" cy="70" r="58" fill="none" stroke="url(#goldGrad)" stroke-width="8"
+            stroke-dasharray="364" stroke-dashoffset="73" stroke-linecap="round"/>
+          <defs>
+            <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" style="stop-color:#8a6e30"/>
+              <stop offset="100%" style="stop-color:#e8c97e"/>
+            </linearGradient>
+          </defs>
+        </svg>
+        <div class="score-text">80</div>
+        <div class="score-sub">满分100</div>
+      </div>
+      <div class="score-verdict">谨慎乐观 · 逢低布局</div>
+      <div style="font-size:12px;color:var(--ink-dim);text-align:center;line-height:1.6;margin-top:8px;">
+        当前低估值、高股息提供<br>安全边际，关注息差修复
+      </div>
+    </div>
+    <div class="score-items">
+      <div class="score-item">
+        <div class="si-label">📊 估值吸引力</div>
+        <div class="si-bar-wrap"><div class="si-bar" style="width:88%;background:linear-gradient(to right,var(--gold-dk),var(--gold))"></div></div>
+        <div class="si-score">88/100</div>
+      </div>
+      <div class="score-item">
+        <div class="si-label">💰 盈利能力</div>
+        <div class="si-bar-wrap"><div class="si-bar" style="width:85%;background:linear-gradient(to right,var(--gold-dk),var(--gold))"></div></div>
+        <div class="si-score">85/100</div>
+      </div>
+      <div class="score-item">
+        <div class="si-label">🏦 资产质量</div>
+        <div class="si-bar-wrap"><div class="si-bar" style="width:80%;background:linear-gradient(to right,var(--gold-dk),var(--gold))"></div></div>
+        <div class="si-score">80/100</div>
+      </div>
+      <div class="score-item">
+        <div class="si-label">💵 分红回报</div>
+        <div class="si-bar-wrap"><div class="si-bar" style="width:90%;background:linear-gradient(to right,var(--green),#88ddb8)"></div></div>
+        <div class="si-score">90/100</div>
+      </div>
+      <div class="score-item">
+        <div class="si-label">🏆 同业竞争力</div>
+        <div class="si-bar-wrap"><div class="si-bar" style="width:88%;background:linear-gradient(to right,var(--gold-dk),var(--gold))"></div></div>
+        <div class="si-score">88/100</div>
+      </div>
+      <div class="score-item">
+        <div class="si-label">🌏 宏观顺风</div>
+        <div class="si-bar-wrap"><div class="si-bar" style="width:60%;background:linear-gradient(to right,#555,#888)"></div></div>
+        <div class="si-score">60/100</div>
+      </div>
+      <div class="score-item">
+        <div class="si-label">📈 增长动能</div>
+        <div class="si-bar-wrap"><div class="si-bar" style="width:65%;background:linear-gradient(to right,#555,#888)"></div></div>
+        <div class="si-score">65/100</div>
+      </div>
+      <div class="score-item">
+        <div class="si-label">🔒 风险控制</div>
+        <div class="si-bar-wrap"><div class="si-bar" style="width:82%;background:linear-gradient(to right,var(--gold-dk),var(--gold))"></div></div>
+        <div class="si-score">82/100</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider" style="margin-top:32px;"></div>
+
+  <div class="grid-2" style="margin-top:24px;">
+    <div class="card">
+      <div class="card-title" style="color:var(--green);">✦ 核心投资亮点</div>
+      <div style="display:flex;flex-direction:column;gap:10px;padding-top:4px;">
+        <div class="annotation"><strong>高股息防御性：</strong>当前股息率 7.51%，
+        远超无风险利率，股息利差5.7%，具有明显的价值洼地特征。</div>
+        <div class="annotation"><strong>零售银行护城河：</strong>AUM突破13万亿，招财宝、
+        掌上生活APP月活超亿，零售客户粘性强，非息收入占比高。</div>
+        <div class="annotation"><strong>ROE领先同业：</strong>12.89% 的ROE在股份制银行中居于领先，
+        体现精细化运营和资本利用效率的综合优势。</div>
+        <div class="annotation"><strong>PB破净历史机会：</strong>PB 0.95× 历史上破净期间
+        往往是较好的中长期买入时机，下行空间相对有限。</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title" style="color:var(--red);">⚠ 主要风险因素</div>
+      <div style="display:flex;flex-direction:column;gap:10px;padding-top:4px;">
+        <div class="annotation"><strong>净息差持续收窄：</strong>LPR多次下调叠加存量房贷利率
+        调整，2024年净息差已降至约2%，未来仍面临压力。</div>
+        <div class="annotation"><strong>房地产风险敞口：</strong>行业整体面临地产
+        相关不良资产暴露风险，虽招行管控较好但仍需持续关注。</div>
+        <div class="annotation"><strong>经济增速放缓：</strong>通缩环境下企业和居民
+        信贷需求受抑，规模扩张空间收窄，影响利息收入增长。</div>
+        <div class="annotation"><strong>估值修复催化剂不足：</strong>短期缺乏明显的
+        业绩超预期或政策催化剂，股价修复可能需要较长时间。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ── SCRIPTS ─────────────────────────────────────────────────────────────── -->
+<script>
+// ── Data ────────────────────────────────────────────────────────────────────
+const priceDates  = ["2020-01-02", "2020-01-08", "2020-01-14", "2020-01-20", "2020-02-03", "2020-02-07", "2020-02-13", "2020-02-19", "2020-02-25", "2020-03-02", "2020-03-06", "2020-03-12", "2020-03-18", "2020-03-24", "2020-03-30", "2020-04-03", "2020-04-10", "2020-04-16", "2020-04-22", "2020-04-28", "2020-05-07", "2020-05-13", "2020-05-19", "2020-05-25", "2020-05-29", "2020-06-04", "2020-06-10", "2020-06-16", "2020-06-22", "2020-06-30", "2020-07-06", "2020-07-10", "2020-07-16", "2020-07-22", "2020-07-28", "2020-08-03", "2020-08-07", "2020-08-13", "2020-08-19", "2020-08-25", "2020-08-31", "2020-09-04", "2020-09-10", "2020-09-16", "2020-09-22", "2020-09-28", "2020-10-12", "2020-10-16", "2020-10-22", "2020-10-28", "2020-11-03", "2020-11-09", "2020-11-13", "2020-11-19", "2020-11-25", "2020-12-01", "2020-12-07", "2020-12-11", "2020-12-17", "2020-12-23", "2020-12-29", "2021-01-05", "2021-01-11", "2021-01-15", "2021-01-21", "2021-01-27", "2021-02-02", "2021-02-08", "2021-02-19", "2021-02-25", "2021-03-03", "2021-03-09", "2021-03-15", "2021-03-19", "2021-03-25", "2021-03-31", "2021-04-07", "2021-04-13", "2021-04-19", "2021-04-23", "2021-04-29", "2021-05-10", "2021-05-14", "2021-05-20", "2021-05-26", "2021-06-01", "2021-06-07", "2021-06-11", "2021-06-18", "2021-06-24", "2021-06-30", "2021-07-06", "2021-07-12", "2021-07-16", "2021-07-22", "2021-07-28", "2021-08-03", "2021-08-09", "2021-08-13", "2021-08-19", "2021-08-25", "2021-08-31", "2021-09-06", "2021-09-10", "2021-09-16", "2021-09-24", "2021-09-30", "2021-10-13", "2021-10-19", "2021-10-25", "2021-10-29", "2021-11-04", "2021-11-10", "2021-11-16", "2021-11-22", "2021-11-26", "2021-12-02", "2021-12-08", "2021-12-14", "2021-12-20", "2021-12-24", "2021-12-30", "2022-01-06", "2022-01-12", "2022-01-18", "2022-01-24", "2022-01-28", "2022-02-10", "2022-02-16", "2022-02-22", "2022-02-28", "2022-03-04", "2022-03-10", "2022-03-16", "2022-03-22", "2022-03-28", "2022-04-01", "2022-04-11", "2022-04-15", "2022-04-21", "2022-04-27", "2022-05-06", "2022-05-12", "2022-05-18", "2022-05-24", "2022-05-30", "2022-06-06", "2022-06-10", "2022-06-16", "2022-06-22", "2022-06-28", "2022-07-04", "2022-07-08", "2022-07-14", "2022-07-20", "2022-07-26", "2022-08-01", "2022-08-05", "2022-08-11", "2022-08-17", "2022-08-23", "2022-08-29", "2022-09-02", "2022-09-08", "2022-09-15", "2022-09-21", "2022-09-27", "2022-10-10", "2022-10-14", "2022-10-20", "2022-10-26", "2022-11-01", "2022-11-07", "2022-11-11", "2022-11-17", "2022-11-23", "2022-11-29", "2022-12-05", "2022-12-09", "2022-12-15", "2022-12-21", "2022-12-27", "2023-01-03", "2023-01-09", "2023-01-13", "2023-01-19", "2023-02-01", "2023-02-07", "2023-02-13", "2023-02-17", "2023-02-23", "2023-03-01", "2023-03-07", "2023-03-13", "2023-03-17", "2023-03-23", "2023-03-29", "2023-04-04", "2023-04-11", "2023-04-17", "2023-04-21", "2023-04-27", "2023-05-08", "2023-05-12", "2023-05-18", "2023-05-24", "2023-05-30", "2023-06-05", "2023-06-09", "2023-06-15", "2023-06-21", "2023-06-29", "2023-07-05", "2023-07-11", "2023-07-17", "2023-07-21", "2023-07-27", "2023-08-02", "2023-08-08", "2023-08-14", "2023-08-18", "2023-08-24", "2023-08-30", "2023-09-05", "2023-09-11", "2023-09-15", "2023-09-21", "2023-09-27", "2023-10-11", "2023-10-17", "2023-10-23", "2023-10-27", "2023-11-02", "2023-11-08", "2023-11-14", "2023-11-20", "2023-11-24", "2023-11-30", "2023-12-06", "2023-12-12", "2023-12-18", "2023-12-22", "2023-12-28", "2024-01-04", "2024-01-10", "2024-01-16", "2024-01-22", "2024-01-26", "2024-02-01", "2024-02-07", "2024-02-21", "2024-02-27", "2024-03-04", "2024-03-08", "2024-03-14", "2024-03-20", "2024-03-26", "2024-04-01", "2024-04-09", "2024-04-15", "2024-04-19", "2024-04-25", "2024-05-06", "2024-05-10", "2024-05-16", "2024-05-22", "2024-05-28", "2024-06-03", "2024-06-07", "2024-06-14", "2024-06-20", "2024-06-26", "2024-07-02", "2024-07-08", "2024-07-12", "2024-07-18", "2024-07-24", "2024-07-30", "2024-08-05", "2024-08-09", "2024-08-15", "2024-08-21", "2024-08-27", "2024-09-02", "2024-09-06", "2024-09-12", "2024-09-20", "2024-09-26", "2024-10-09", "2024-10-15", "2024-10-21", "2024-10-25", "2024-10-31", "2024-11-06", "2024-11-12", "2024-11-18", "2024-11-22", "2024-11-28", "2024-12-04", "2024-12-10", "2024-12-16", "2024-12-20", "2024-12-26", "2025-01-02", "2025-01-08", "2025-01-14", "2025-01-20", "2025-01-24", "2025-02-07", "2025-02-13", "2025-02-19", "2025-02-25", "2025-03-03", "2025-03-07", "2025-03-13", "2025-03-19", "2025-03-25", "2025-03-31", "2025-04-07", "2025-04-11", "2025-04-17", "2025-04-23", "2025-04-29", "2025-05-08", "2025-05-14", "2025-05-20", "2025-05-26", "2025-05-30", "2025-06-06", "2025-06-12", "2025-06-18", "2025-06-24", "2025-06-30", "2025-07-04", "2025-07-10", "2025-07-16", "2025-07-22", "2025-07-28", "2025-08-01", "2025-08-07", "2025-08-13", "2025-08-19", "2025-08-25", "2025-08-29", "2025-09-04", "2025-09-10", "2025-09-16", "2025-09-22", "2025-09-26", "2025-10-10", "2025-10-16", "2025-10-22", "2025-10-28", "2025-11-03", "2025-11-07", "2025-11-13", "2025-11-19", "2025-11-25", "2025-12-01", "2025-12-05", "2025-12-11", "2025-12-17", "2025-12-23", "2025-12-29", "2026-01-06", "2026-01-12", "2026-01-16", "2026-01-22", "2026-01-28", "2026-02-03", "2026-02-09", "2026-02-13", "2026-02-27", "2026-03-05", "2026-03-11", "2026-03-17"];
+const priceClose  = [38.88, 38.41, 38.81, 38.31, 35.03, 35.42, 35.27, 35.53, 34.63, 34.75, 35.41, 34.16, 30.82, 31.51, 32.65, 32.15, 32.1, 32.1, 32.73, 33.86, 34.45, 34.54, 34.27, 33.09, 33.82, 35.15, 35.34, 34.14, 33.5, 33.72, 40.41, 37.25, 35.6, 36.44, 34.58, 35.0, 36.61, 37.33, 38.35, 37.58, 37.69, 36.8, 37.7, 38.06, 37.88, 37.25, 37.56, 39.78, 41.19, 40.1, 41.24, 43.03, 42.58, 44.87, 44.43, 46.2, 44.42, 42.68, 44.05, 42.32, 42.83, 42.18, 48.42, 51.14, 52.64, 52.0, 51.97, 55.26, 55.2, 54.45, 52.77, 48.5, 53.11, 51.76, 51.01, 51.1, 50.43, 50.32, 51.77, 53.3, 53.28, 53.9, 54.98, 55.47, 58.5, 57.36, 57.0, 56.33, 54.69, 55.0, 54.19, 53.54, 50.4, 51.0, 50.25, 47.47, 47.59, 49.06, 51.18, 51.58, 51.43, 48.96, 51.2, 54.12, 50.7, 48.77, 50.45, 53.03, 52.88, 54.59, 53.97, 51.75, 50.63, 52.5, 51.69, 50.1, 50.89, 52.04, 51.15, 50.69, 49.86, 48.5, 48.15, 49.76, 49.01, 51.85, 49.21, 51.71, 51.07, 51.22, 49.8, 48.7, 44.7, 42.58, 45.53, 45.05, 47.1, 45.9, 46.83, 41.28, 38.04, 37.91, 36.61, 38.5, 38.9, 39.07, 38.97, 40.12, 39.96, 39.31, 41.28, 41.05, 39.81, 36.48, 35.85, 36.33, 34.52, 34.3, 34.36, 34.24, 33.1, 33.28, 34.32, 33.3, 36.01, 34.41, 33.9, 31.8, 31.08, 30.07, 27.93, 28.19, 29.16, 31.24, 32.31, 32.22, 34.86, 36.1, 36.75, 36.33, 35.95, 36.67, 37.58, 38.8, 39.66, 40.65, 40.54, 38.41, 37.72, 36.71, 38.27, 38.25, 36.56, 35.05, 34.36, 35.2, 34.12, 34.28, 33.73, 35.2, 34.5, 32.63, 35.6, 34.04, 34.45, 32.93, 32.64, 33.04, 33.74, 33.72, 33.17, 32.68, 33.03, 32.71, 31.65, 31.8, 33.66, 34.03, 34.15, 32.46, 31.88, 31.06, 31.66, 33.11, 32.91, 32.96, 32.37, 32.82, 32.45, 32.52, 31.23, 31.53, 30.68, 30.6, 30.2, 30.58, 30.0, 28.79, 27.76, 28.05, 27.28, 27.61, 27.99, 27.81, 28.05, 29.13, 30.25, 31.12, 30.42, 31.31, 33.0, 32.18, 31.52, 31.67, 31.25, 31.18, 32.4, 32.64, 32.31, 32.83, 33.62, 34.4, 34.88, 35.62, 36.25, 36.06, 34.83, 34.15, 33.99, 33.81, 34.01, 34.06, 35.08, 33.99, 34.0, 34.09, 33.18, 32.42, 32.1, 32.33, 32.76, 33.24, 33.7, 31.93, 31.25, 30.23, 30.94, 35.38, 37.01, 38.5, 38.85, 39.1, 37.36, 38.56, 37.59, 37.9, 36.45, 36.47, 36.81, 38.6, 37.74, 37.91, 39.48, 38.51, 39.28, 39.85, 40.12, 40.26, 40.2, 41.71, 41.98, 41.03, 42.05, 43.57, 43.84, 46.02, 45.09, 43.29, 40.83, 41.51, 42.12, 41.99, 42.0, 42.8, 44.81, 43.9, 43.8, 43.43, 44.47, 45.23, 45.85, 46.75, 45.95, 47.07, 48.24, 45.11, 44.94, 44.44, 44.42, 45.15, 43.54, 43.4, 43.87, 42.89, 43.05, 43.0, 41.75, 40.92, 40.8, 40.18, 41.93, 41.95, 41.6, 41.79, 42.51, 43.21, 43.22, 43.25, 43.44, 43.45, 41.68, 41.52, 41.91, 41.87, 42.73, 41.12, 38.72, 37.85, 37.8, 38.3, 39.48, 38.71, 38.75, 39.15, 39.5, 40.12];
+const pricePE     = [10.84, 10.71, 10.82, 10.4, 9.51, 9.62, 9.58, 9.65, 9.4, 9.44, 9.62, 9.28, 8.37, 8.56, 8.87, 8.73, 8.72, 8.72, 8.89, 9.2, 9.11, 9.13, 9.06, 8.75, 8.94, 9.29, 9.34, 9.02, 8.85, 8.91, 10.68, 9.85, 9.41, 9.63, 9.14, 9.25, 9.68, 9.87, 10.14, 9.93, 10.33, 10.08, 10.33, 10.43, 10.38, 10.21, 10.29, 10.9, 11.29, 10.99, 11.28, 11.77, 11.64, 12.27, 12.15, 12.63, 12.15, 11.67, 12.05, 11.57, 11.71, 11.53, 13.24, 13.25, 13.64, 13.47, 13.46, 14.32, 14.3, 14.11, 13.67, 12.57, 13.76, 13.41, 13.22, 13.24, 13.07, 13.04, 13.41, 13.81, 13.23, 13.38, 13.65, 13.77, 14.53, 14.24, 14.15, 13.99, 13.58, 13.66, 13.46, 13.29, 12.52, 12.66, 12.48, 11.79, 11.82, 12.18, 12.71, 11.97, 11.93, 11.36, 11.88, 12.56, 11.76, 11.31, 11.7, 12.3, 12.27, 12.04, 11.9, 11.41, 11.17, 11.58, 11.4, 11.05, 11.22, 11.48, 11.28, 11.18, 11.0, 10.7, 10.62, 10.97, 10.31, 10.9, 10.35, 10.87, 10.74, 10.77, 10.47, 10.24, 9.4, 8.95, 9.58, 9.47, 9.91, 9.65, 9.85, 8.68, 7.74, 7.71, 7.45, 7.83, 7.92, 7.95, 7.93, 8.16, 8.13, 8.0, 8.4, 8.35, 8.1, 7.42, 7.3, 7.39, 7.02, 6.98, 6.99, 6.97, 6.51, 6.55, 6.75, 6.55, 7.08, 6.77, 6.67, 6.26, 6.11, 5.92, 5.49, 5.34, 5.52, 5.91, 6.12, 6.1, 6.6, 6.83, 6.96, 6.88, 6.81, 6.94, 7.11, 7.34, 7.51, 7.43, 7.41, 7.02, 6.89, 6.71, 6.99, 6.99, 6.68, 6.4, 6.28, 6.43, 6.24, 6.26, 6.16, 6.43, 6.3, 5.84, 6.38, 6.1, 6.17, 5.9, 5.85, 5.92, 6.04, 6.04, 5.94, 5.85, 5.92, 5.86, 5.67, 5.69, 6.03, 6.09, 6.12, 5.81, 5.71, 5.56, 5.53, 5.79, 5.75, 5.76, 5.66, 5.73, 5.67, 5.68, 5.46, 5.51, 5.34, 5.32, 5.25, 5.32, 5.22, 5.01, 4.83, 4.88, 4.75, 4.8, 4.87, 4.84, 4.88, 5.07, 5.2, 5.35, 5.23, 5.39, 5.68, 5.54, 5.42, 5.45, 5.38, 5.36, 5.57, 5.62, 5.56, 5.65, 5.78, 5.92, 6.03, 6.16, 6.27, 6.24, 6.02, 5.91, 5.88, 5.85, 5.88, 5.89, 6.07, 5.88, 5.88, 5.9, 5.74, 5.61, 5.55, 5.59, 5.67, 5.75, 5.83, 5.53, 5.41, 5.24, 5.36, 6.13, 6.41, 6.67, 6.73, 6.77, 6.46, 6.67, 6.5, 6.55, 6.3, 6.3, 6.36, 6.67, 6.52, 6.55, 6.82, 6.66, 6.79, 6.89, 6.82, 6.84, 6.83, 7.09, 7.13, 6.97, 7.15, 7.41, 7.45, 7.82, 7.66, 7.36, 6.94, 7.05, 7.16, 7.14, 7.14, 7.31, 7.66, 7.5, 7.48, 7.42, 7.6, 7.73, 7.83, 7.99, 7.85, 8.04, 8.24, 7.71, 7.68, 7.59, 7.59, 7.71, 7.44, 7.42, 7.5, 7.33, 7.31, 7.3, 7.09, 6.95, 6.93, 6.82, 7.12, 7.12, 7.06, 7.07, 7.2, 7.31, 7.32, 7.32, 7.35, 7.36, 7.06, 7.03, 7.09, 7.09, 7.23, 6.96, 6.55, 6.41, 6.35, 6.43, 6.63, 6.5, 6.51, 6.57, 6.63, 6.74];
+const pricePB     = [1.74, 1.72, 1.74, 1.58, 1.44, 1.46, 1.45, 1.47, 1.43, 1.43, 1.46, 1.41, 1.27, 1.38, 1.43, 1.4, 1.4, 1.4, 1.43, 1.48, 1.43, 1.43, 1.42, 1.37, 1.4, 1.46, 1.47, 1.42, 1.39, 1.4, 1.68, 1.63, 1.55, 1.59, 1.51, 1.53, 1.6, 1.63, 1.67, 1.64, 1.65, 1.55, 1.59, 1.6, 1.6, 1.57, 1.58, 1.68, 1.74, 1.69, 1.68, 1.75, 1.73, 1.83, 1.81, 1.88, 1.81, 1.74, 1.79, 1.72, 1.74, 1.72, 1.97, 1.78, 1.83, 1.81, 2.05, 1.93, 1.92, 1.9, 1.84, 1.69, 1.85, 1.8, 2.01, 2.01, 1.99, 1.98, 2.04, 2.1, 2.0, 2.03, 2.07, 2.08, 2.2, 2.16, 2.14, 2.12, 2.06, 2.07, 2.04, 2.01, 1.89, 2.01, 1.98, 1.87, 1.88, 1.93, 2.02, 1.94, 1.93, 1.84, 1.92, 2.03, 1.91, 1.83, 1.9, 1.99, 1.99, 1.95, 1.93, 1.85, 1.81, 1.88, 1.85, 1.79, 1.82, 1.86, 1.83, 1.81, 1.78, 1.74, 1.72, 1.78, 1.59, 1.68, 1.6, 1.68, 1.66, 1.66, 1.62, 1.58, 1.45, 1.38, 1.57, 1.55, 1.62, 1.58, 1.61, 1.42, 1.25, 1.25, 1.2, 1.27, 1.28, 1.29, 1.28, 1.32, 1.31, 1.29, 1.36, 1.35, 1.31, 1.2, 1.24, 1.26, 1.2, 1.19, 1.19, 1.19, 1.1, 1.1, 1.14, 1.1, 1.19, 1.14, 1.12, 1.05, 1.03, 1.0, 0.93, 0.89, 0.92, 0.99, 1.02, 1.02, 1.1, 1.14, 1.16, 1.15, 1.13, 1.16, 1.19, 1.22, 1.25, 1.24, 1.24, 1.17, 1.15, 1.12, 1.17, 1.17, 1.12, 1.07, 1.05, 1.08, 1.04, 1.05, 1.03, 1.08, 1.05, 0.96, 1.04, 1.0, 1.01, 0.96, 0.96, 0.97, 0.99, 0.99, 0.97, 0.96, 0.97, 0.96, 0.98, 0.98, 1.04, 1.05, 1.05, 1.0, 0.98, 0.96, 0.93, 0.97, 0.97, 0.97, 0.95, 0.97, 0.96, 0.96, 0.92, 0.93, 0.87, 0.87, 0.85, 0.86, 0.85, 0.81, 0.79, 0.79, 0.77, 0.78, 0.79, 0.79, 0.79, 0.82, 0.8, 0.82, 0.8, 0.83, 0.87, 0.85, 0.83, 0.84, 0.82, 0.82, 0.88, 0.89, 0.88, 0.89, 0.92, 0.94, 0.91, 0.93, 0.94, 0.94, 0.91, 0.89, 0.89, 0.88, 0.89, 0.89, 0.91, 0.89, 0.93, 0.94, 0.91, 0.89, 0.88, 0.89, 0.9, 0.91, 0.93, 0.91, 0.82, 0.79, 0.81, 0.93, 0.97, 1.01, 1.02, 1.03, 0.94, 0.97, 0.95, 0.95, 0.92, 0.92, 0.93, 0.97, 0.95, 0.95, 0.99, 0.97, 0.99, 1.0, 0.94, 0.94, 0.94, 0.98, 0.98, 0.96, 0.99, 1.02, 1.03, 1.08, 1.06, 1.04, 0.98, 1.0, 1.02, 1.01, 1.01, 1.01, 1.06, 1.04, 1.04, 1.03, 1.05, 1.07, 1.08, 1.11, 1.09, 1.11, 1.14, 1.12, 1.12, 1.1, 1.1, 1.12, 1.08, 1.08, 1.09, 1.07, 1.07, 1.07, 1.04, 1.02, 1.02, 1.0, 1.05, 1.05, 1.04, 0.97, 0.98, 1.0, 1.0, 1.0, 1.01, 1.01, 0.96, 0.96, 0.97, 0.97, 0.99, 0.95, 0.92, 0.9, 0.9, 0.91, 0.94, 0.92, 0.92, 0.93, 0.94, 0.95];
+const priceDV     = [2.42, 2.45, 2.42, 2.45, 2.68, 2.65, 2.67, 2.65, 2.71, 2.71, 2.65, 2.75, 3.05, 2.98, 2.88, 2.92, 2.93, 2.93, 2.87, 2.78, 2.73, 2.72, 2.74, 2.84, 2.78, 2.67, 2.66, 2.75, 2.81, 2.79, 2.33, 5.75, 3.37, 3.29, 3.47, 3.43, 3.28, 3.21, 3.13, 3.19, 3.18, 3.26, 3.18, 3.15, 3.17, 3.22, 3.19, 3.02, 2.91, 2.99, 2.91, 2.79, 2.82, 2.67, 2.7, 2.6, 2.7, 2.81, 2.72, 2.84, 2.8, 2.85, 2.48, 2.35, 2.28, 2.31, 2.31, 2.17, 2.17, 2.2, 2.27, 2.47, 2.26, 2.32, 2.35, 2.35, 2.38, 2.38, 2.32, 2.25, 2.25, 2.23, 2.18, 2.16, 2.05, 2.09, 2.11, 2.13, 2.19, 2.18, 2.21, 2.24, null, 2.46, 2.49, 2.64, 2.63, 2.55, 2.45, 2.43, 2.44, 2.56, 2.45, 2.32, 2.47, 2.57, 2.48, 2.36, 2.37, 2.3, 2.32, 2.42, 2.47, 2.39, 2.42, 2.5, 2.46, 2.41, 2.45, 2.47, 2.51, 2.58, 2.6, 2.52, 2.56, 2.42, 2.55, 2.42, 2.45, 2.45, 2.52, 2.57, 2.8, 2.94, 2.75, 2.78, 2.66, 2.73, 2.68, 3.04, 3.29, 3.31, 3.42, 3.25, 3.22, 3.21, 3.22, 3.12, 3.14, 3.19, 3.04, 3.05, 3.15, null, 4.25, 4.19, 4.41, 4.44, 4.43, 4.45, 4.6, 4.57, 4.43, 4.57, 4.23, 4.42, 4.49, 4.79, 4.9, 5.06, 5.45, 5.4, 5.22, 4.87, 4.71, 4.72, 4.37, 4.22, 4.14, 4.19, 4.23, 4.15, 4.05, 3.92, 3.84, 3.74, 3.75, 3.96, 4.04, 4.15, 3.98, 3.98, 4.16, 4.34, 4.43, 4.32, 4.46, 4.44, 4.51, 4.32, 4.41, 4.66, 4.28, 4.47, 4.42, 4.62, 4.66, 4.61, 4.51, 4.51, 4.59, 4.66, 4.61, 4.65, 5.49, 5.47, 5.16, 5.11, 5.09, 5.35, 5.45, 5.6, 5.49, 5.25, 5.28, 5.27, 5.37, 5.3, 5.36, 5.34, 5.57, 5.51, 5.66, 5.68, 5.75, 5.68, 5.79, 6.04, 6.26, 6.2, 6.37, 6.29, 6.21, 6.25, 6.2, 5.97, 5.75, 5.58, 5.71, 5.55, 5.27, 5.4, 5.51, 5.49, 5.56, 5.57, 5.36, 5.32, 5.38, 5.29, 5.17, 5.05, 4.98, 4.88, 4.79, 4.82, 4.99, 5.09, 5.11, 5.14, 5.11, 5.1, 4.95, 5.11, 10.91, 5.78, 5.94, 6.08, 6.14, 6.1, 6.02, 5.93, 5.85, 6.18, 6.31, 6.52, 6.37, 5.57, 5.33, 5.12, 5.08, 5.04, 5.28, 5.11, 5.25, 5.2, 5.41, 5.41, 5.36, 5.11, 5.23, 5.2, 4.99, 5.12, 5.02, 4.95, 4.92, 4.9, 4.91, 4.73, 4.7, 4.81, 4.69, 4.53, 4.5, 4.29, 4.37, 4.56, 4.83, 4.75, 4.68, 4.7, 4.7, 4.61, 4.4, 4.49, 4.5, 4.54, 4.43, 4.36, 4.3, 4.22, 4.29, 4.19, 4.09, 4.43, 4.45, 4.5, 4.5, 4.43, 4.59, 4.61, 4.56, 4.66, 4.65, 4.65, 4.79, 4.89, 4.9, 4.98, 4.77, 4.77, 4.81, 4.79, 4.7, 4.63, 4.63, 4.62, 4.6, 4.6, 4.8, 4.82, 4.77, 4.78, 4.68, 4.86, 7.78, 7.96, 7.97, 7.87, 7.63, 7.78, 7.78, 7.7, 7.63, 7.51];
+
+const incYears    = [2018, 2019, 2020, 2021, 2022, 2023, 2024];
+const incRevenue  = [2485.55, 2697.03, 2904.82, 3312.53, 3447.83, 3391.23, 3374.88];
+const incProfit   = [805.6, 928.67, 973.42, 1199.22, 1380.12, 1466.02, 1483.91];
+const incEPS      = [3.13, 3.62, 3.79, 4.61, 5.26, 5.63, 5.66];
+
+const finaYears   = ["2019", "2020", "2021", "2022", "2023", "2024"];
+const finaROE     = [16.13, 14.58, 15.16, 15.3, 14.5, 12.89];
+const finaNPM     = [34.64, 33.72, 36.48, 40.4, 43.64, 44.32];
+const finaYOY     = [15.28, 4.82, 23.2, 15.08, 6.22, 1.22];
+
+const balYears    = [2018, 2019, 2020, 2021, 2022, 2023, 2024];
+const balAssets   = [6.75, 7.42, 8.36, 9.25, 10.14, 11.03, 12.15];
+const balEquity   = [5.4, 6.11, 7.24, 8.59, 9.46, 10.76, 12.26];
+
+const divYears    = ["2002", "2003", "2004", "2005", "2006", "2007", "2008", "2009", "2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023", "2024", "2025H1"];
+const divVals     = [0.1, 0.07, 0.1, 0.07, 0.11, 0.25, 0.06, 0.19, 0.26, 0.38, 0.6, 0.59, 0.64, 0.69, 0.74, 0.84, 0.94, 1.2, 1.25, 1.52, 1.74, 1.97, 2.0, 1.013];
+
+const peerNames   = ["\u5de5\u5546\u94f6\u884c", "\u5efa\u8bbe\u94f6\u884c", "\u519c\u4e1a\u94f6\u884c", "\u4e2d\u56fd\u94f6\u884c", "\u62db\u5546\u94f6\u884c", "\u90ae\u50a8\u94f6\u884c", "\u4ea4\u901a\u94f6\u884c", "\u4e2d\u4fe1\u94f6\u884c", "\u5174\u4e1a\u94f6\u884c", "\u6d66\u53d1\u94f6\u884c", "\u5e73\u5b89\u94f6\u884c", "\u5b81\u6ce2\u94f6\u884c"];
+const peerPE      = [7.18, 7.18, 8.2, 7.39, 6.74, 7.12, 6.46, 6.16, 5.19, 6.91, 4.96, 6.97];
+const peerPB      = [0.7, 0.72, 0.88, 0.67, 0.95, 0.62, 0.55, 0.6, 0.5, 0.47, 0.48, 0.92];
+const peerDV      = [4.14, 2.01, 3.62, 3.94, 7.51, 4.12, 4.34, 4.61, 8.55, 3.59, 5.42, 3.88];
+const peerMV      = [26338.42, 24224.2, 23658.85, 17721.68, 10118.2, 6208.91, 6132.45, 4351.45, 4023.06, 3457.15, 2140.47, 2043.81];
+
+const cmpNames    = ["\u62db\u5546\u94f6\u884c", "\u5de5\u5546\u94f6\u884c", "\u519c\u4e1a\u94f6\u884c", "\u5efa\u8bbe\u94f6\u884c", "\u4ea4\u901a\u94f6\u884c", "\u5174\u4e1a\u94f6\u884c", "\u6d66\u53d1\u94f6\u884c", "\u5149\u5927\u94f6\u884c"];
+const cmpROE      = [12.89, 9.47, 9.43, 10.37, 8.38, 9.2, 6.2, 7.31];
+const cmpNPM      = [44.32, 44.65, 39.78, 44.83, 36.27, 36.51, 26.84, 30.95];
+const cmpYOY      = [1.22, 0.51, 4.72, 0.88, 0.93, 0.12, 23.31, 2.22];
+
+const gdpQuarters = ["2021Q4", "2022Q1", "2022Q2", "2022Q3", "2022Q4", "2023Q1", "2023Q2", "2023Q3", "2023Q4", "2024Q1", "2024Q2", "2024Q3", "2024Q4", "2025Q1", "2025Q2", "2025Q3"];
+const gdpYOY      = [8.6, 4.8, 2.7, 3.2, 3.1, 4.7, 5.7, 5.4, 5.4, 5.3, 5.0, 4.8, 5.0, 5.4, 5.3, 5.2];
+
+const cpiMonths   = ["2023/03", "2023/04", "2023/05", "2023/06", "2023/07", "2023/08", "2023/09", "2023/10", "2023/11", "2023/12", "2024/01", "2024/02", "2024/03", "2024/04", "2024/05", "2024/06", "2024/07", "2024/08", "2024/09", "2024/10", "2024/11", "2024/12", "2025/01", "2025/02"];
+const cpiYOY      = [0.7, 0.1, 0.2, 0.0, -0.3, 0.1, 0.0, -0.2, -0.5, -0.3, -0.8, 0.7, 0.1, 0.3, 0.3, 0.2, 0.5, 0.6, 0.4, 0.3, 0.2, 0.1, 0.5, -0.7];
+const m2Months    = ["2023/03", "2023/04", "2023/05", "2023/06", "2023/07", "2023/08", "2023/09", "2023/10", "2023/11", "2023/12", "2024/01", "2024/02", "2024/03", "2024/04", "2024/05", "2024/06", "2024/07", "2024/08", "2024/09", "2024/10", "2024/11", "2024/12", "2025/01", "2025/02"];
+const m2YOY       = [12.7, 12.4, 11.6, 11.3, 10.7, 10.6, 10.3, 10.3, 10.0, 9.7, 8.7, 8.7, 8.3, 7.2, 7.0, 6.2, 6.3, 6.3, 6.8, 7.5, 7.1, 7.3, 7.0, 7.0];
+const m1YOY       = [5.1, 5.3, 4.7, 3.1, 2.3, 2.2, 2.1, 1.9, 1.3, 1.3, 5.9, 1.2, 1.1, -1.4, -4.2, -5.0, -6.6, -7.3, -7.4, -6.1, -3.7, 1.2, 0.4, 0.1];
+
+const shiborDates = ["2020-01-02", "2020-01-09", "2020-01-16", "2020-01-22", "2020-02-06", "2020-02-13", "2020-02-20", "2020-02-27", "2020-03-05", "2020-03-12", "2020-03-19", "2020-03-26", "2020-04-02", "2020-04-10", "2020-04-17", "2020-04-24", "2020-05-06", "2020-05-12", "2020-05-19", "2020-05-26", "2020-06-02", "2020-06-09", "2020-06-16", "2020-06-23", "2020-07-02", "2020-07-09", "2020-07-16", "2020-07-23", "2020-07-30", "2020-08-06", "2020-08-13", "2020-08-20", "2020-08-27", "2020-09-03", "2020-09-10", "2020-09-17", "2020-09-24", "2020-10-09", "2020-10-16", "2020-10-23", "2020-10-30", "2020-11-06", "2020-11-13", "2020-11-20", "2020-11-27", "2020-12-04", "2020-12-11", "2020-12-18", "2020-12-25", "2021-01-04", "2021-01-11", "2021-01-18", "2021-01-25", "2021-02-01", "2021-02-08", "2021-02-22", "2021-03-01", "2021-03-08", "2021-03-15", "2021-03-22", "2021-03-29", "2021-04-06", "2021-04-13", "2021-04-20", "2021-04-27", "2021-05-07", "2021-05-14", "2021-05-21", "2021-05-28", "2021-06-04", "2021-06-11", "2021-06-21", "2021-06-28", "2021-07-05", "2021-07-12", "2021-07-19", "2021-07-26", "2021-08-02", "2021-08-09", "2021-08-16", "2021-08-23", "2021-08-30", "2021-09-06", "2021-09-13", "2021-09-22", "2021-09-29", "2021-10-13", "2021-10-20", "2021-10-27", "2021-11-03", "2021-11-10", "2021-11-17", "2021-11-24", "2021-12-01", "2021-12-08", "2021-12-15", "2021-12-22", "2021-12-29", "2022-01-06", "2022-01-13", "2022-01-20", "2022-01-27", "2022-02-10", "2022-02-17", "2022-02-24", "2022-03-03", "2022-03-10", "2022-03-17", "2022-03-24", "2022-03-31", "2022-04-11", "2022-04-18", "2022-04-24", "2022-04-29", "2022-05-10", "2022-05-17", "2022-05-24", "2022-05-31", "2022-06-08", "2022-06-15", "2022-06-22", "2022-06-29", "2022-07-06", "2022-07-13", "2022-07-20", "2022-07-27", "2022-08-03", "2022-08-10", "2022-08-17", "2022-08-24", "2022-08-31", "2022-09-07", "2022-09-15", "2022-09-22", "2022-09-29", "2022-10-11", "2022-10-18", "2022-10-25", "2022-11-01", "2022-11-08", "2022-11-15", "2022-11-22", "2022-11-29", "2022-12-06", "2022-12-13", "2022-12-20", "2022-12-27", "2023-01-04", "2023-01-11", "2023-01-18", "2023-01-30", "2023-02-06", "2023-02-13", "2023-02-20", "2023-02-27", "2023-03-06", "2023-03-13", "2023-03-20", "2023-03-27", "2023-04-03", "2023-04-11", "2023-04-18", "2023-04-24", "2023-05-04", "2023-05-10", "2023-05-17", "2023-05-24", "2023-05-31", "2023-06-07", "2023-06-14", "2023-06-21", "2023-06-29", "2023-07-06", "2023-07-13", "2023-07-20", "2023-07-27", "2023-08-03", "2023-08-10", "2023-08-17", "2023-08-24", "2023-08-31", "2023-09-07", "2023-09-14", "2023-09-21", "2023-09-28", "2023-10-11", "2023-10-18", "2023-10-25", "2023-11-01", "2023-11-08", "2023-11-15", "2023-11-22", "2023-11-29", "2023-12-06", "2023-12-13", "2023-12-20", "2023-12-27", "2024-01-04", "2024-01-11", "2024-01-18", "2024-01-25", "2024-02-01", "2024-02-07", "2024-02-20", "2024-02-27", "2024-03-05", "2024-03-12", "2024-03-19", "2024-03-26", "2024-04-02", "2024-04-10", "2024-04-17", "2024-04-24", "2024-04-30", "2024-05-10", "2024-05-16", "2024-05-23", "2024-05-30", "2024-06-06", "2024-06-14", "2024-06-21", "2024-06-28", "2024-07-05", "2024-07-12", "2024-07-19", "2024-07-26", "2024-08-02", "2024-08-09", "2024-08-16", "2024-08-23", "2024-08-30", "2024-09-06", "2024-09-13", "2024-09-23", "2024-09-29", "2024-10-11", "2024-10-17", "2024-10-24", "2024-10-31", "2024-11-07", "2024-11-14", "2024-11-21", "2024-11-28", "2024-12-05", "2024-12-12", "2024-12-19", "2024-12-26", "2025-01-03", "2025-01-10", "2025-01-17", "2025-01-24", "2025-02-07", "2025-02-13", "2025-02-20", "2025-02-27", "2025-03-06", "2025-03-13", "2025-03-20", "2025-03-27", "2025-04-03", "2025-04-11", "2025-04-18", "2025-04-25", "2025-05-06", "2025-05-13", "2025-05-20", "2025-05-27", "2025-06-04", "2025-06-11", "2025-06-18", "2025-06-25", "2025-07-02", "2025-07-09", "2025-07-16", "2025-07-23", "2025-07-30", "2025-08-06", "2025-08-13", "2025-08-20", "2025-08-27", "2025-09-03", "2025-09-10", "2025-09-17", "2025-09-24", "2025-09-30", "2025-10-14", "2025-10-21", "2025-10-28", "2025-11-04", "2025-11-11", "2025-11-18", "2025-11-25", "2025-12-02", "2025-12-09", "2025-12-16", "2025-12-23", "2025-12-30", "2026-01-07", "2026-01-14", "2026-01-21", "2026-01-28", "2026-02-04", "2026-02-11", "2026-02-25", "2026-03-03", "2026-03-10", "2026-03-17"];
+const shibor3m    = [2.99, 2.87, 2.87, 2.86, 2.78, 2.6, 2.5, 2.43, 2.29, 2.22, 2.1, 1.98, 1.89, 1.51, 1.4, 1.4, 1.4, 1.4, 1.4, 1.41, 1.46, 1.73, 2.02, 2.11, 2.11, 2.12, 2.29, 2.54, 2.59, 2.6, 2.6, 2.6, 2.62, 2.65, 2.69, 2.69, 2.67, 2.71, 2.79, 2.9, 2.97, 3.0, 3.0, 3.02, 3.14, 3.08, 3.02, 2.85, 2.77, 2.75, 2.62, 2.58, 2.58, 2.77, 2.79, 2.85, 2.81, 2.75, 2.71, 2.69, 2.64, 2.63, 2.6, 2.6, 2.59, 2.57, 2.52, 2.49, 2.48, 2.44, 2.43, 2.45, 2.46, 2.44, 2.43, 2.4, 2.4, 2.4, 2.36, 2.35, 2.35, 2.35, 2.35, 2.36, 2.38, 2.43, 2.42, 2.43, 2.44, 2.45, 2.45, 2.47, 2.48, 2.49, 2.49, 2.49, 2.49, 2.5, 2.5, 2.5, 2.47, 2.46, 2.44, 2.41, 2.38, 2.36, 2.36, 2.37, 2.37, 2.37, 2.36, 1.4, 1.3, 1.84, 1.3, 1.32, 2.01, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 1.98, 1.92, 1.86, 1.77, 1.64, 1.6, 1.59, 1.6, 1.6, 1.6, 1.61, 1.67, 1.68, 1.69, 1.72, 1.75, 1.78, 2.01, 2.25, 2.19, 2.21, 2.28, 2.36, 2.41, 2.38, 2.35, 2.37, 2.37, 2.36, 2.37, 2.39, 2.42, 2.47, 2.5, 2.49, 2.47, 2.43, 2.42, 2.43, 2.43, 2.41, 2.36, 2.29, 2.25, 2.22, 2.18, 2.12, 2.13, 2.17, 2.15, 2.11, 2.1, 2.1, 2.09, 2.07, 2.03, 2.02, 2.04, 2.07, 2.14, 2.26, 2.3, 2.3, 2.32, 2.38, 2.42, 2.45, 2.45, 2.46, 2.48, 2.54, 2.59, 2.6, 2.59, 2.4, 2.4, 2.4, 2.4, 2.38, 2.34, 2.27, 2.2, 2.17, 2.16, 2.16, 2.16, 2.15, 2.12, 2.05, 2.01, 2.0, 1.99, 1.97, 1.96, 1.96, 1.95, 1.94, 1.92, 1.92, 1.91, 1.9, 1.9, 1.88, 1.85, 1.83, 1.84, 1.84, 1.85, 1.85, 1.85, 1.85, 1.84, 1.84, 1.85, 1.88, 1.88, 1.87, 1.86, 1.86, 1.86, 1.76, 1.74, 1.71, 1.69, 1.68, 1.64, 1.68, 1.7, 1.71, 1.73, 1.78, 1.89, 1.98, 2.01, 1.98, 1.92, 1.87, 1.79, 1.76, 1.75, 1.75, 1.66, 1.64, 1.64, 1.65, 1.64, 1.63, 1.63, 1.62, 1.56, 1.56, 1.55, 1.56, 1.56, 1.55, 1.55, 1.55, 1.55, 1.55, 1.55, 1.57, 1.58, 1.58, 1.59, 1.6, 1.59, 1.58, 1.58, 1.58, 1.58, 1.58, 1.59, 1.6, 1.6, 1.6, 1.6, 1.6, 1.59, 1.58, 1.58, 1.58, 1.56, 1.55, 1.54];
+const shibor1y    = [3.09, 3.02, 3.01, 3.0, 2.91, 2.83, 2.77, 2.74, 2.65, 2.53, 2.45, 2.32, 2.2, 1.79, 1.68, 1.68, 1.68, 1.7, 1.7, 1.72, 1.8, 2.01, 2.23, 2.33, 2.37, 2.42, 2.57, 2.78, 2.82, 2.85, 2.87, 2.9, 2.92, 2.95, 2.99, 3.0, 3.01, 3.02, 3.07, 3.12, 3.18, 3.2, 3.21, 3.24, 3.29, 3.26, 3.24, 3.07, 3.02, 2.99, 2.89, 2.86, 2.89, 3.0, 3.02, 3.08, 3.1, 3.1, 3.1, 3.1, 3.08, 3.07, 3.05, 3.02, 2.98, 2.96, 2.93, 2.93, 2.91, 2.89, 2.88, 2.9, 2.9, 2.9, 2.86, 2.81, 2.79, 2.78, 2.72, 2.71, 2.7, 2.7, 2.7, 2.7, 2.7, 2.72, 2.72, 2.75, 2.77, 2.78, 2.77, 2.76, 2.76, 2.75, 2.74, 2.74, 2.74, 2.74, 2.73, 2.72, 2.69, 2.66, 2.64, 2.6, 2.57, 2.57, 2.58, 2.59, 2.6, 2.61, 2.58, 2.56, 2.53, 2.47, 2.44, 2.38, 2.32, 2.32, 2.36, 2.38, 2.37, 2.36, 2.35, 2.34, 2.3, 2.24, 2.12, 1.99, 1.96, 1.96, 1.97, 1.97, 1.97, 2.0, 2.01, 2.0, 2.0, 2.03, 2.04, 2.05, 2.22, 2.48, 2.42, 2.46, 2.53, 2.6, 2.62, 2.58, 2.54, 2.58, 2.58, 2.6, 2.62, 2.64, 2.69, 2.73, 2.75, 2.72, 2.68, 2.66, 2.65, 2.65, 2.65, 2.64, 2.57, 2.49, 2.48, 2.46, 2.41, 2.36, 2.36, 2.38, 2.37, 2.34, 2.34, 2.34, 2.33, 2.31, 2.28, 2.26, 2.28, 2.3, 2.35, 2.41, 2.45, 2.46, 2.49, 2.51, 2.54, 2.55, 2.56, 2.56, 2.56, 2.58, 2.65, 2.65, 2.64, 2.5, 2.48, 2.47, 2.47, 2.44, 2.4, 2.37, 2.31, 2.27, 2.26, 2.27, 2.27, 2.26, 2.23, 2.15, 2.08, 2.11, 2.1, 2.1, 2.1, 2.1, 2.09, 2.07, 2.06, 2.05, 2.02, 2.01, 2.0, 1.98, 1.95, 1.92, 1.92, 1.94, 1.96, 1.96, 1.96, 1.96, 1.92, 1.93, 1.93, 1.94, 1.95, 1.93, 1.9, 1.9, 1.9, 1.81, 1.78, 1.75, 1.71, 1.7, 1.67, 1.7, 1.73, 1.74, 1.75, 1.82, 1.92, 1.98, 2.0, 1.99, 1.94, 1.89, 1.79, 1.77, 1.77, 1.76, 1.68, 1.67, 1.69, 1.7, 1.68, 1.68, 1.66, 1.65, 1.61, 1.62, 1.62, 1.65, 1.64, 1.64, 1.65, 1.65, 1.66, 1.66, 1.67, 1.67, 1.68, 1.67, 1.68, 1.68, 1.66, 1.65, 1.65, 1.65, 1.65, 1.65, 1.65, 1.65, 1.65, 1.65, 1.65, 1.65, 1.63, 1.62, 1.61, 1.61, 1.59, 1.58, 1.57];
+
+const holdNames   = ["\u9999\u6e2f\u4e2d\u592e\u7ed3\u7b97(\u4ee3\u7406\u4eba)\u6709\u9650\u516c\u53f8", "\u62db\u5546\u5c40\u8f6e\u8239\u6709\u9650\u516c\u53f8", "\u4e2d\u56fd\u8fdc\u6d0b\u8fd0\u8f93\u6709\u9650\u516c\u53f8", "\u6df1\u5733\u5e02\u664f\u6e05\u6295\u8d44\u53d1\u5c55\u6709\u9650\u516c\u53f8", "\u62db\u5546\u5c40\u91d1\u878d\u63a7\u80a1\u6709\u9650\u516c\u53f8", "\u548c\u8c10\u5065\u5eb7\u4fdd\u9669\u80a1\u4efd\u6709\u9650\u516c\u53f8-\u4f20\u7edf-\u666e\u901a\u4fdd\u9669\u4ea7\u54c1", "\u9999\u6e2f\u4e2d\u592e\u7ed3\u7b97\u6709\u9650\u516c\u53f8", "\u6df1\u5733\u5e02\u695a\u6e90\u6295\u8d44\u53d1\u5c55\u6709\u9650\u516c\u53f8", "\u4e2d\u8fdc\u6d77\u8fd0(\u5e7f\u5dde)\u6709\u9650\u516c\u53f8", "\u4e2d\u56fd\u8bc1\u5238\u91d1\u878d\u80a1\u4efd\u6709\u9650\u516c\u53f8"];
+const holdRatios  = [18.06, 13.04, 6.24, 4.99, 4.55, 4.48, 4.43, 3.74, 2.76, 2.08];
+
+// Financial table data
+const financialData = [
+  { year:'2018', rev:248.6, profit:80.6, eps:3.13, roe:null, npm:null, yoy:null, assets:6.75 },
+  { year:'2019', rev:269.7, profit:92.9, eps:3.62, roe:16.13, npm:34.6, yoy:15.3, assets:7.42 },
+  { year:'2020', rev:290.5, profit:97.3, eps:3.79, roe:14.58, npm:33.7, yoy:4.8, assets:8.36 },
+  { year:'2021', rev:331.3, profit:119.9, eps:4.61, roe:15.16, npm:36.5, yoy:23.2, assets:9.25 },
+  { year:'2022', rev:344.8, profit:138.0, eps:5.26, roe:15.30, npm:40.4, yoy:15.1, assets:10.14 },
+  { year:'2023', rev:339.1, profit:146.6, eps:5.63, roe:14.50, npm:43.6, yoy:6.2, assets:11.03 },
+  { year:'2024', rev:337.5, profit:148.4, eps:5.66, roe:12.89, npm:44.3, yoy:1.2, assets:12.15 },
+];
+
+// Peer financial data
+const peerFinaData = [{"name": "\u62db\u5546\u94f6\u884c", "roe": 12.89, "npm": 44.32, "yoy": 1.22}, {"name": "\u5de5\u5546\u94f6\u884c", "roe": 9.47, "npm": 44.65, "yoy": 0.51}, {"name": "\u519c\u4e1a\u94f6\u884c", "roe": 9.43, "npm": 39.78, "yoy": 4.72}, {"name": "\u5efa\u8bbe\u94f6\u884c", "roe": 10.37, "npm": 44.83, "yoy": 0.88}, {"name": "\u4ea4\u901a\u94f6\u884c", "roe": 8.38, "npm": 36.27, "yoy": 0.93}, {"name": "\u5174\u4e1a\u94f6\u884c", "roe": 9.2, "npm": 36.51, "yoy": 0.12}, {"name": "\u6d66\u53d1\u94f6\u884c", "roe": 6.2, "npm": 26.84, "yoy": 23.31}, {"name": "\u5149\u5927\u94f6\u884c", "roe": 7.31, "npm": 30.95, "yoy": 2.22}];
+
+// ── Chart defaults ──────────────────────────────────────────────────────────
+Chart.defaults.color = '#9a8f80';
+Chart.defaults.font.family = "'DM Mono', monospace";
+Chart.defaults.font.size = 11;
+Chart.defaults.plugins.legend.labels.boxWidth = 10;
+Chart.defaults.plugins.legend.labels.padding = 16;
+
+const GOLD = '#c9a55a';
+const GOLD_LT = '#e8c97e';
+const GREEN = '#52b788';
+const RED = '#e05252';
+const BLUE = '#5b9bd5';
+const DIM = '#4a443c';
+const BG_CARD = '#111c2a';
+
+function alphaGold(a) { return `rgba(201,165,90,${a})`; }
+function alphaGreen(a) { return `rgba(82,183,136,${a})`; }
+function alphaRed(a) { return `rgba(224,82,82,${a})`; }
+function alphaBlue(a) { return `rgba(91,155,213,${a})`; }
+
+const baseOptions = {
+  responsive: true,
+  maintainAspectRatio: false,
+  interaction: { mode: 'index', intersect: false },
+  plugins: {
+    legend: { position: 'top', align: 'end' },
+    tooltip: {
+      backgroundColor: '#162032',
+      borderColor: alphaGold(0.3),
+      borderWidth: 1,
+      titleColor: GOLD,
+      bodyColor: '#e8dfd0',
+      padding: 12,
+    }
+  },
+  scales: {
+    x: {
+      grid: { color: 'rgba(255,255,255,0.03)' },
+      ticks: { maxTicksLimit: 8 }
+    },
+    y: {
+      grid: { color: 'rgba(255,255,255,0.04)' },
+    }
+  }
+};
+
+// ── Chart PE ────────────────────────────────────────────────────────────────
+new Chart(document.getElementById('chartPE'), {
+  type: 'line',
+  data: {
+    labels: priceDates,
+    datasets: [{
+      label: 'PE(TTM)',
+      data: pricePE,
+      borderColor: GOLD,
+      backgroundColor: alphaGold(0.1),
+      borderWidth: 1.5,
+      pointRadius: 0,
+      fill: true,
+      tension: 0.3,
+    }]
+  },
+  options: { ...baseOptions,
+    plugins: { ...baseOptions.plugins,
+      annotation: {
+        annotations: {
+          pe8: { type:'line', yMin:8, yMax:8, borderColor:alphaGold(0.3), borderWidth:1, borderDash:[4,4], label:{ content:'8×', enabled:true, position:'end', color:alphaGold(0.6), font:{ size:9 } } },
+          pe6: { type:'line', yMin:6, yMax:6, borderColor:alphaRed(0.3), borderWidth:1, borderDash:[4,4], label:{ content:'6×', enabled:true, position:'end', color:alphaRed(0.6), font:{ size:9 } } },
+        }
+      }
+    },
+    scales: { ...baseOptions.scales, y: { ...baseOptions.scales.y, suggestedMin:4, suggestedMax:12 } }
+  }
+});
+
+// ── Chart PB + DV ────────────────────────────────────────────────────────────
+new Chart(document.getElementById('chartPBDV'), {
+  type: 'line',
+  data: {
+    labels: priceDates,
+    datasets: [
+      { label:'PB', data:pricePB, borderColor:BLUE, backgroundColor:alphaBlue(0.05), borderWidth:1.5, pointRadius:0, fill:true, tension:0.3, yAxisID:'y' },
+      { label:'股息率%', data:priceDV, borderColor:GREEN, backgroundColor:alphaGreen(0.05), borderWidth:1.5, pointRadius:0, fill:true, tension:0.3, yAxisID:'y1' },
+    ]
+  },
+  options: { ...baseOptions,
+    scales: {
+      x: baseOptions.scales.x,
+      y: { ...baseOptions.scales.y, position:'left', title:{ display:true, text:'PB', color:DIM } },
+      y1: { ...baseOptions.scales.y, position:'right', title:{ display:true, text:'股息率%', color:DIM }, grid:{ drawOnChartArea:false } }
+    }
+  }
+});
+
+// ── Chart Price ──────────────────────────────────────────────────────────────
+new Chart(document.getElementById('chartPrice'), {
+  type: 'line',
+  data: {
+    labels: priceDates,
+    datasets: [{
+      label: '收盘价(元)',
+      data: priceClose,
+      borderColor: GOLD_LT,
+      backgroundColor: alphaGold(0.08),
+      borderWidth: 2,
+      pointRadius: 0,
+      fill: true,
+      tension: 0.2,
+    }]
+  },
+  options: { ...baseOptions, scales: { ...baseOptions.scales, y: { ...baseOptions.scales.y, suggestedMin:20 } } }
+});
+
+// ── Chart Income ─────────────────────────────────────────────────────────────
+new Chart(document.getElementById('chartIncome'), {
+  type: 'bar',
+  data: {
+    labels: incYears,
+    datasets: [
+      { label:'营业收入(亿)', data:incRevenue, backgroundColor:alphaGold(0.35), borderColor:alphaGold(0.7), borderWidth:1, yAxisID:'y' },
+      { label:'归母净利(亿)', data:incProfit, backgroundColor:alphaGreen(0.5), borderColor:GREEN, borderWidth:1, yAxisID:'y' },
+      { label:'EPS(元)', data:incEPS, type:'line', borderColor:BLUE, borderWidth:2, pointRadius:4, pointBackgroundColor:BG_CARD, tension:0.3, yAxisID:'y1' },
+    ]
+  },
+  options: { ...baseOptions,
+    scales: {
+      x: baseOptions.scales.x,
+      y: { ...baseOptions.scales.y, position:'left', title:{ display:true, text:'亿元', color:DIM } },
+      y1: { ...baseOptions.scales.y, position:'right', title:{ display:true, text:'元/股', color:DIM }, suggestedMin:0, suggestedMax:8, grid:{ drawOnChartArea:false } }
+    }
+  }
+});
+
+// ── Chart ROE ────────────────────────────────────────────────────────────────
+new Chart(document.getElementById('chartROE'), {
+  type: 'line',
+  data: {
+    labels: finaYears,
+    datasets: [
+      { label:'ROE(%)', data:finaROE, borderColor:GOLD, backgroundColor:alphaGold(0.12), borderWidth:2, pointRadius:4, pointBackgroundColor:BG_CARD, fill:true, tension:0.3, yAxisID:'y' },
+      { label:'净利增速(%)', data:finaYOY, borderColor:GREEN, backgroundColor:alphaGreen(0.1), borderWidth:2, pointRadius:4, pointBackgroundColor:BG_CARD, fill:false, tension:0.3, yAxisID:'y1' },
+    ]
+  },
+  options: { ...baseOptions,
+    scales: {
+      x: baseOptions.scales.x,
+      y: { ...baseOptions.scales.y, position:'left', title:{ display:true, text:'ROE%', color:DIM }, suggestedMin:10, suggestedMax:20 },
+      y1: { ...baseOptions.scales.y, position:'right', title:{ display:true, text:'净利增速%', color:DIM }, grid:{ drawOnChartArea:false } }
+    }
+  }
+});
+
+// ── Chart Assets ─────────────────────────────────────────────────────────────
+new Chart(document.getElementById('chartAssets'), {
+  type: 'bar',
+  data: {
+    labels: balYears,
+    datasets: [{
+      label:'总资产(万亿元)',
+      data: balAssets,
+      backgroundColor: balAssets.map((v,i) => i===balAssets.length-1 ? alphaGold(0.7) : alphaGold(0.3)),
+      borderColor: GOLD,
+      borderWidth: 1,
+    }]
+  },
+  options: { ...baseOptions,
+    plugins: { ...baseOptions.plugins, legend:{ display:false } },
+    scales: { ...baseOptions.scales, y: { ...baseOptions.scales.y, suggestedMin:5 } }
+  }
+});
+
+// ── Chart Equity ─────────────────────────────────────────────────────────────
+new Chart(document.getElementById('chartEquity'), {
+  type: 'bar',
+  data: {
+    labels: balYears,
+    datasets: [{
+      label:'股东权益(千亿元)',
+      data: balEquity,
+      backgroundColor: balEquity.map((v,i) => i===balEquity.length-1 ? alphaGreen(0.7) : alphaGreen(0.3)),
+      borderColor: GREEN,
+      borderWidth: 1,
+    }]
+  },
+  options: { ...baseOptions,
+    plugins: { ...baseOptions.plugins, legend:{ display:false } },
+  }
+});
+
+// ── Chart Dividend ───────────────────────────────────────────────────────────
+new Chart(document.getElementById('chartDividend'), {
+  type: 'bar',
+  data: {
+    labels: divYears,
+    datasets: [{
+      label:'每股现金分红(元)',
+      data: divVals,
+      backgroundColor: divVals.map((v,i) => i>=divVals.length-2 ? alphaGold(0.75) : alphaGold(0.3)),
+      borderColor: GOLD,
+      borderWidth: 1,
+      borderRadius: 2,
+    }]
+  },
+  options: { ...baseOptions,
+    plugins: { ...baseOptions.plugins, legend:{ display:false } },
+    scales: { ...baseOptions.scales, y: { ...baseOptions.scales.y, suggestedMin:0 } }
+  }
+});
+
+// ── Chart Peer PE ─────────────────────────────────────────────────────────────
+new Chart(document.getElementById('chartPeerPE'), {
+  type: 'bar',
+  data: {
+    labels: peerNames,
+    datasets: [
+      { label:'PE(TTM)', data:peerPE, backgroundColor:peerNames.map(n=>n==='招商银行'?alphaGold(0.8):alphaBlue(0.3)), borderColor:peerNames.map(n=>n==='招商银行'?GOLD:BLUE), borderWidth:1, yAxisID:'y' },
+      { label:'PB', data:peerPB, type:'line', borderColor:GREEN, pointBackgroundColor:peerNames.map(n=>n==='招商银行'?GREEN:alphaGreen(0.5)), pointRadius:5, borderWidth:1.5, tension:0, yAxisID:'y1' },
+    ]
+  },
+  options: { ...baseOptions,
+    scales: {
+      x: { ...baseOptions.scales.x, ticks:{ maxRotation:30 } },
+      y: { ...baseOptions.scales.y, position:'left', title:{ display:true, text:'PE', color:DIM } },
+      y1: { ...baseOptions.scales.y, position:'right', title:{ display:true, text:'PB', color:DIM }, grid:{ drawOnChartArea:false }, suggestedMin:0, suggestedMax:1.2 }
+    }
+  }
+});
+
+// ── Chart Peer ROE ────────────────────────────────────────────────────────────
+new Chart(document.getElementById('chartPeerROE'), {
+  type: 'bar',
+  data: {
+    labels: cmpNames,
+    datasets: [
+      { label:'ROE(%)', data:cmpROE, backgroundColor:cmpNames.map(n=>n==='招商银行'?alphaGold(0.8):alphaGold(0.25)), borderColor:cmpNames.map(n=>n==='招商银行'?GOLD:alphaGold(0.4)), borderWidth:1 },
+      { label:'净利润率(%)', data:cmpNPM, type:'line', borderColor:GREEN, pointRadius:5, pointBackgroundColor:BG_CARD, borderWidth:1.5, tension:0, yAxisID:'y1' },
+    ]
+  },
+  options: { ...baseOptions,
+    scales: {
+      x: { ...baseOptions.scales.x, ticks:{ maxRotation:30 } },
+      y: { ...baseOptions.scales.y, position:'left', title:{ display:true, text:'ROE%', color:DIM }, suggestedMin:0, suggestedMax:20 },
+      y1: { ...baseOptions.scales.y, position:'right', title:{ display:true, text:'净利润率%', color:DIM }, grid:{ drawOnChartArea:false }, suggestedMin:0, suggestedMax:55 }
+    }
+  }
+});
+
+// ── Chart GDP ────────────────────────────────────────────────────────────────
+new Chart(document.getElementById('chartGDP'), {
+  type: 'bar',
+  data: {
+    labels: gdpQuarters,
+    datasets: [{
+      label:'GDP同比增速(%)',
+      data: gdpYOY,
+      backgroundColor: gdpYOY.map(v=>v>=5?alphaGold(0.5):v>=4?alphaGold(0.3):alphaRed(0.3)),
+      borderColor: gdpYOY.map(v=>v>=5?GOLD:v>=4?alphaGold(0.5):alphaRed(0.5)),
+      borderWidth:1,
+    }]
+  },
+  options: { ...baseOptions,
+    plugins: { ...baseOptions.plugins, legend:{ display:false }, annotation:{ annotations:{
+      target:{ type:'line', yMin:5, yMax:5, borderColor:alphaGold(0.4), borderWidth:1, borderDash:[4,4] }
+    } } },
+    scales: { ...baseOptions.scales, x:{ ...baseOptions.scales.x, ticks:{ maxTicksLimit:8 } }, y:{ ...baseOptions.scales.y, suggestedMin:-10, suggestedMax:20 } }
+  }
+});
+
+// ── Chart CPI ────────────────────────────────────────────────────────────────
+new Chart(document.getElementById('chartCPI'), {
+  type: 'line',
+  data: {
+    labels: cpiMonths,
+    datasets: [{
+      label:'CPI同比(%)',
+      data: cpiYOY,
+      borderColor: cpiYOY.map(v=>v<0?RED:GOLD).slice(-1)[0] < 0 ? RED : GOLD,
+      backgroundColor: alphaRed(0.08),
+      borderWidth: 2,
+      pointRadius: 0,
+      fill: true,
+      tension: 0.3,
+    }]
+  },
+  options: { ...baseOptions,
+    plugins: { ...baseOptions.plugins, legend:{ display:false },
+      annotation:{ annotations:{
+        zero:{ type:'line', yMin:0, yMax:0, borderColor:'rgba(255,255,255,0.2)', borderWidth:1 }
+      } }
+    },
+    scales: { ...baseOptions.scales, x:{ ...baseOptions.scales.x, ticks:{ maxTicksLimit:8 } } }
+  }
+});
+
+// ── Chart M2 ─────────────────────────────────────────────────────────────────
+new Chart(document.getElementById('chartM2'), {
+  type: 'line',
+  data: {
+    labels: m2Months,
+    datasets: [
+      { label:'M2同比(%)', data:m2YOY, borderColor:GOLD, backgroundColor:alphaGold(0.08), borderWidth:2, pointRadius:0, fill:true, tension:0.3 },
+      { label:'M1同比(%)', data:m1YOY, borderColor:RED, backgroundColor:alphaRed(0.05), borderWidth:2, pointRadius:0, fill:false, tension:0.3 },
+    ]
+  },
+  options: { ...baseOptions, scales:{ ...baseOptions.scales, x:{ ...baseOptions.scales.x, ticks:{ maxTicksLimit:8 } } } }
+});
+
+// ── Chart Shibor ─────────────────────────────────────────────────────────────
+new Chart(document.getElementById('chartShibor'), {
+  type: 'line',
+  data: {
+    labels: shiborDates,
+    datasets: [
+      { label:'3个月期', data:shibor3m, borderColor:BLUE, backgroundColor:alphaBlue(0.08), borderWidth:1.5, pointRadius:0, fill:true, tension:0.3 },
+      { label:'1年期', data:shibor1y, borderColor:GOLD, borderWidth:1.5, pointRadius:0, fill:false, tension:0.3 },
+    ]
+  },
+  options: { ...baseOptions, scales:{ ...baseOptions.scales, x:{ ...baseOptions.scales.x, ticks:{ maxTicksLimit:8 } }, y:{ ...baseOptions.scales.y, suggestedMin:1, suggestedMax:3.5 } } }
+});
+
+// ── Chart Holders (Horizontal Bar) ───────────────────────────────────────────
+new Chart(document.getElementById('chartHolders'), {
+  type: 'bar',
+  data: {
+    labels: holdNames,
+    datasets: [{
+      label:'持股比例(%)',
+      data: holdRatios,
+      backgroundColor: holdRatios.map((v,i) => {
+        const colors = [alphaGold(0.75), alphaGold(0.6), alphaGold(0.5), alphaGold(0.45), alphaGold(0.4), alphaGold(0.35), alphaGold(0.3), alphaGold(0.25), alphaGold(0.2), alphaGold(0.15)];
+        return colors[i] || alphaGold(0.2);
+      }),
+      borderColor: GOLD,
+      borderWidth: 1,
+      borderRadius: 2,
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display:false },
+      tooltip: { ...baseOptions.plugins.tooltip, callbacks: { label: ctx => `  ${ctx.raw.toFixed(2)}%` } }
+    },
+    scales: {
+      x: { grid: { color:'rgba(255,255,255,0.04)' }, ticks: { callback: v => v+'%' } },
+      y: { grid: { display:false }, ticks: { font:{ size:10 }, color:'#9a8f80' } }
+    }
+  }
+});
+
+// ── Holder Bars HTML ──────────────────────────────────────────────────────────
+const holderContainer = document.getElementById('holderBars');
+const maxHold = Math.max(...holdRatios);
+holdNames.forEach((name, i) => {
+  const pct = holdRatios[i];
+  const width = (pct / maxHold * 100).toFixed(1);
+  holderContainer.innerHTML += `
+    <div class="holder-bar">
+      <div class="holder-name">${name}</div>
+      <div class="holder-track"><div class="holder-fill" style="width:${width}%"></div></div>
+      <div class="holder-pct">${pct.toFixed(2)}%</div>
+    </div>`;
+});
+
+// ── Financial Table ───────────────────────────────────────────────────────────
+const tbody = document.getElementById('financialTableBody');
+financialData.forEach(d => {
+  const isLatest = d.year === '2024';
+  const cls = isLatest ? 'class="highlight"' : '';
+  const yoyColor = d.yoy > 10 ? 'val-pos' : d.yoy < 0 ? 'val-neg' : '';
+  tbody.innerHTML += `<tr ${cls}>
+    <td>${d.year}${isLatest ? ' ★' : ''}</td>
+    <td>${d.rev.toFixed(1)}</td>
+    <td>${d.profit.toFixed(1)}</td>
+    <td>¥${d.eps}</td>
+    <td>${d.roe ? d.roe.toFixed(2)+'%' : '—'}</td>
+    <td>${d.npm ? d.npm.toFixed(1)+'%' : '—'}</td>
+    <td class="${yoyColor}">${d.yoy ? (d.yoy>0?'+':'')+d.yoy.toFixed(1)+'%' : '—'}</td>
+    <td>${d.assets.toFixed(2)}</td>
+  </tr>`;
+});
+
+// ── Peer Table ────────────────────────────────────────────────────────────────
+const peerTbody = document.getElementById('peerTableBody');
+peers_sorted = peerNames.map((name, i) => ({
+  name, pe: peerPE[i], pb: peerPB[i], dv: peerDV[i], mv: peerMV[i],
+  roe: null, npm: null, yoy: null
+}));
+// Merge fina data
+peerFinaData.forEach(f => {
+  const idx = peers_sorted.findIndex(p => p.name === f.name);
+  if (idx >= 0) { peers_sorted[idx].roe = f.roe; peers_sorted[idx].npm = f.npm; peers_sorted[idx].yoy = f.yoy; }
+});
+peers_sorted.sort((a,b) => (b.mv||0)-(a.mv||0));
+peers_sorted.forEach(p => {
+  const isCMB = p.name === '招商银行';
+  const cls = isCMB ? 'class="highlight"' : '';
+  peerTbody.innerHTML += `<tr ${cls}>
+    <td>${p.name}${isCMB ? ' ★' : ''}</td>
+    <td>${p.pe ? p.pe.toFixed(2) : '—'}</td>
+    <td>${p.pb ? p.pb.toFixed(3) : '—'}</td>
+    <td class="${p.dv>6?'val-pos':''}">${p.dv ? p.dv.toFixed(2)+'%' : '—'}</td>
+    <td>${p.mv ? Math.round(p.mv).toLocaleString() : '—'}</td>
+    <td class="${p.roe>12?'val-pos':p.roe<8?'val-neg':''}">${p.roe ? p.roe.toFixed(2)+'%' : '—'}</td>
+    <td class="${p.npm>40?'val-pos':''}">${p.npm ? p.npm.toFixed(1)+'%' : '—'}</td>
+    <td class="${p.yoy>5?'val-pos':p.yoy<0?'val-neg':''}">${p.yoy ? (p.yoy>0?'+':'')+p.yoy.toFixed(2)+'%' : '—'}</td>
+  </tr>`;
+});
+
+// ── Nav active state ──────────────────────────────────────────────────────────
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('.nav-link');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      navLinks.forEach(l => l.classList.remove('active'));
+      const active = document.querySelector(`.nav-link[href="#${entry.target.id}"]`);
+      if (active) active.classList.add('active');
+    }
+  });
+}, { threshold: 0.3 });
+sections.forEach(s => observer.observe(s));
+
+// ── Fade-in on scroll ─────────────────────────────────────────────────────────
+const fadeObserver = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.08 });
+document.querySelectorAll('.fade-in').forEach(el => fadeObserver.observe(el));
+</script>
+</body>
+</html>
